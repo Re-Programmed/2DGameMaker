@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine.DiscordRPC
+namespace _2DGameMaker.DiscordRPC
 {
     static class RPCManager
     {
@@ -12,10 +12,11 @@ namespace Engine.DiscordRPC
 
 		/// <summary>
 		/// Run on initilization to start the RPC.
+		/// clientID is the id of your discord application, richPresence is what presence to display on startup.
 		/// </summary>
-		public static void Initialize()
+		public static void Initialize(string clientID, RichPresence richPresence)
 		{
-			client = new DiscordRpcClient("995784691179331584");
+			client = new DiscordRpcClient(clientID);
 
 			client.Logger = new ConsoleLogger() { Level = LogLevel.None };
 
@@ -31,18 +32,7 @@ namespace Engine.DiscordRPC
 
 			client.Initialize();
 
-			UpdateState(new RichPresence()
-			{
-				Timestamps = new Timestamps(DateTime.UtcNow),
-				Details = "Testing.",
-				State = "Test.",
-				Assets = new Assets()
-				{
-					LargeImageKey = "testing",
-					LargeImageText = "Test.",
-					SmallImageKey = "testing"
-				}
-			});
+			UpdateState(richPresence);
 		}
 
 		/// <summary>
@@ -57,7 +47,7 @@ namespace Engine.DiscordRPC
 		/// <summary>
 		/// Run on window close to release data. FAILURE TO RUN THIS MAY CAUSE A MEMORY LEAK.
 		/// </summary>
-		public static void Deinitialize()
+		public static void Dispose()
 		{
 			client.Dispose();
 		}
