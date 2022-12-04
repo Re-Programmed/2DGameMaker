@@ -56,7 +56,7 @@ namespace _2DGameMaker.Utils.AssetManagment
                 {
                     string[] file_data = fd.Split(" ");
 
-                    Console.WriteLine("FILE LOCATED: " + getResourceInformationH(file_data, ResourceInformation.H_FILE_TYPE));
+                    Console.WriteLine("FILE LOCATED: " + getResourceInformationH(file_data, ResourceInformation.H_FILE_TYPE) + ", " + getResourceInformationH(file_data, ResourceInformation.H_FILE_ID));
 
                     switch ((ResourceType)getResourceInformationH(file_data, ResourceInformation.H_FILE_TYPE))
                     {
@@ -114,6 +114,7 @@ namespace _2DGameMaker.Utils.AssetManagment
             using (var stream = new MemoryStream(data, 0, data.Length))
             {
                 image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+                stream.Close();
             }
             
             return image;
