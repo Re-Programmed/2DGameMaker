@@ -7,6 +7,7 @@ namespace _2DGameMaker.Utils.Math
     public class Vec2
     {
         public static readonly Vec2 Zero = new Vec2(0, 0);
+        public static readonly Vec2 One = new Vec2(1, 1);
 
         public float X { get; protected set; }
         public float Y { get; protected set; }
@@ -19,5 +20,15 @@ namespace _2DGameMaker.Utils.Math
 
         public static Vec2 operator +(Vec2 a, Vec2 b) => new Vec2(a.X + b.X, a.Y + b.Y);
         public static Vec2 operator *(Vec2 a, Vec2 b) => new Vec2(a.X * b.X, a.Y * b.Y);
+        public static Vec2 operator *(Vec2 a, float b) => new Vec2(a.X * b, a.Y * b);
+        public static Vec2 operator /(Vec2 a, float b) => new Vec2(a.X / b, a.Y / b);
+
+        public Vec2 Lerp(Vec2 target, float speed)
+        {
+            X = Math.Lerp(X, target.X, speed);
+            Y = Math.Lerp(Y, target.Y, speed);
+
+            return this;
+        }
     }
 }

@@ -4,6 +4,10 @@ using _2DGameMaker.Rendering.Display;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using _2DGameMaker.Objects;
+using _2DGameMaker.Objects.Stationaries;
+using _2DGameMaker.Utils.Math;
+using _2DGameMaker.Utils.AssetManagment;
 
 namespace _2DGameMaker.Game
 {
@@ -22,8 +26,12 @@ namespace _2DGameMaker.Game
             RPCManager.Dispose();
         }
 
+        StaticObject[] test_object = new StaticObject[3];
+
         protected override void Init()
         {
+            SetClearColor(new Utils.Math.Vec4((float)randomBG.NextDouble(), (float)randomBG.NextDouble(), (float)randomBG.NextDouble(), 0));
+
             RPCManager.Initialize("995784691179331584", new RichPresence()
             {
                 Timestamps = new Timestamps(DateTime.UtcNow),
@@ -36,16 +44,25 @@ namespace _2DGameMaker.Game
                     SmallImageKey = "testing"
                 }
             });
+
+            test_object[0] = new StaticObject(Vec2.Zero, new ObjectTexture(AssetManager.GetTexture("test_sp", "player")));
+            test_object[1] = new StaticObject(Vec2.Zero, new ObjectTexture(AssetManager.GetTexture("test_image", "player")));
+            test_object[2] = new StaticObject(Vec2.Zero, new ObjectTexture(AssetManager.GetTexture("test_kai", "player")));
+
+            Instantiate(test_object[0], 1);
+            Instantiate(test_object[1], 1);
+            Instantiate(test_object[2], 1);
         }
 
         protected override void LateUpdate()
         {
 
+            
         }
 
         protected override void LoadContent()
         {
-
+            base.LoadContent();
         }
 
         protected override void Render()
@@ -56,12 +73,12 @@ namespace _2DGameMaker.Game
         float i = 0;
         protected override void Update()
         {
-            i += GameTime.DeltaTimeScale();
-            if(i > 0.5f)
-            {
-                SetClearColor(new Utils.Math.Vec4((float)randomBG.NextDouble(), (float)randomBG.NextDouble(), (float)randomBG.NextDouble(), 0));
-                i = 0;
-            }
+            base.Update();
+
+            test_object[0].Rotate(1f * GameTime.DeltaTimeScale());
+            test_object[1].Rotate(2f * GameTime.DeltaTimeScale());
+            test_object[2].Rotate(3f * GameTime.DeltaTimeScale());
+
         }
     }
 }

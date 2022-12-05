@@ -5,19 +5,20 @@ using System.Numerics;
 using GLFW;
 using _2DGameMaker.Rendering.Display;
 using _2DGameMaker.Game;
+using _2DGameMaker.Utils.Math;
 
 #pragma warning disable
 
 namespace _2DGameMaker.Rendering.Cameras
 {
-    class Camera2d
+    public class Camera2d
     {
-        public Vector2 FocusPosition { get; set; }
+        public Vec2 FocusPosition { get; set; }
         public float Zoom { get; set; }
 
         public bool DisableZoom;
 
-        public Camera2d(Vector2 focusPosition, float zoom)
+        public Camera2d(Vec2 focusPosition, float zoom)
         {
             this.FocusPosition = focusPosition;
             this.Zoom = zoom;
@@ -36,9 +37,9 @@ namespace _2DGameMaker.Rendering.Cameras
             return orthoMatrix * zoomMatrix;
         }
 
-        public Vector2 MouseToWorldCoords(Vector2 mouse)
+        public Vec2 MouseToWorldCoords(Vector2 mouse)
         {
-            return new Vector2(mouse.X / Zoom + FocusPosition.X - (DisplayManager.WindowSize.X/Zoom) / 2f, mouse.Y / Zoom + (FocusPosition.Y - (DisplayManager.WindowSize.Y/Zoom) / 2f));
+            return new Vec2(mouse.X / Zoom + FocusPosition.X - (DisplayManager.WindowSize.X/Zoom) / 2f, mouse.Y / Zoom + (FocusPosition.Y - (DisplayManager.WindowSize.Y/Zoom) / 2f));
         }
 
 
@@ -47,19 +48,17 @@ namespace _2DGameMaker.Rendering.Cameras
         /// </summary>
         /// <param name="target"></param>
         /// <param name="speed"></param>
-        public void LerpTwards(Vector2 target, float speed)
+        public void LerpTwards(Vec2 target, float speed)
         {
-            Vector2 dest = Vector2.Lerp(FocusPosition, target, speed);
-
-            FocusPosition = dest;
+            FocusPosition.Lerp(target, speed);
         }
 
-        Vector2 LerpGrid;
+        Vec2 LerpGrid;
 
         /// <summary>
         /// Makes the camera move in a grid when a position leaves its area.
         /// </summary>
-        public void GridCheck(Vector2 checkPosition)
+        public void GridCheck(Vec2 checkPosition)
         {
             if(LerpGrid != null)
             {
@@ -68,22 +67,22 @@ namespace _2DGameMaker.Rendering.Cameras
 
             if(checkPosition.X > FocusPosition.X - 100f + (DisplayManager.WindowSize.X * 1 / Zoom) / 2f)
             {
-                LerpGrid = new Vector2(FocusPosition.X + (DisplayManager.WindowSize.X * 1 / Zoom) / 2f, FocusPosition.Y);
+                LerpGrid = new Vec2(FocusPosition.X + (DisplayManager.WindowSize.X * 1 / Zoom) / 2f, FocusPosition.Y);
             }
 
             if (checkPosition.X < FocusPosition.X - (DisplayManager.WindowSize.X * 1 / Zoom) / 2f)
             {
-                LerpGrid = new Vector2(FocusPosition.X - (DisplayManager.WindowSize.X * 1 / Zoom) / 2f, FocusPosition.Y);
+                LerpGrid = new Vec2(FocusPosition.X - (DisplayManager.WindowSize.X * 1 / Zoom) / 2f, FocusPosition.Y);
             }
 
             if (checkPosition.Y > FocusPosition.Y - 100f + (DisplayManager.WindowSize.Y * 1 / Zoom) / 2f)
             {
-                LerpGrid = new Vector2(FocusPosition.X, FocusPosition.Y + (DisplayManager.WindowSize.Y * 1 / Zoom) / 2f);
+                LerpGrid = new Vec2(FocusPosition.X, FocusPosition.Y + (DisplayManager.WindowSize.Y * 1 / Zoom) / 2f);
             }
 
             if (checkPosition.Y < FocusPosition.Y - (DisplayManager.WindowSize.Y * 1 / Zoom) / 2f)
             {
-                LerpGrid = new Vector2(FocusPosition.X, FocusPosition.Y - (DisplayManager.WindowSize.Y * 1 / Zoom) / 2f);
+                LerpGrid = new Vec2(FocusPosition.X, FocusPosition.Y - (DisplayManager.WindowSize.Y * 1 / Zoom) / 2f);
             }
         }
     }

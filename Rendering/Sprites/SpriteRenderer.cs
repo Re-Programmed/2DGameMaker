@@ -7,12 +7,13 @@ using _2DGameMaker.Objects;
 using _2DGameMaker.Utils;
 using System.Text;
 using static _2DGameMaker.OpenGL.GL;
+using _2DGameMaker.Utils.Math;
 
 namespace _2DGameMaker.Rendering.Sprites
 {
     class SpriteRenderer
     {
-        private SpriteShader shader;
+        private static SpriteShader shader;
 
         static readonly Matrix4x4 FlipMat = Matrix4x4.CreateRotationY(_2DGameMaker.Utils.Math.Math.DegToRad(180));
 
@@ -27,11 +28,11 @@ namespace _2DGameMaker.Rendering.Sprites
         1.0f, 0.0f, 1.0f, 0.0f
         };
 
-        uint quadVAO;
+        public static uint quadVAO;
 
-        public SpriteRenderer(SpriteShader shader)
+        public static void InitShader(SpriteShader shader)
         {
-            this.shader = shader;
+            SpriteRenderer.shader = shader;
         }
 
         public SpriteRenderer()
@@ -39,7 +40,7 @@ namespace _2DGameMaker.Rendering.Sprites
 
         }
 
-        public void DrawSprite(Cameras.Camera2d cam, GameObject obj, Texture2D texture, Vector3 color, bool UI = false)
+        public static void DrawSprite(Cameras.Camera2d cam, GameObject obj, Texture2D texture, Vec3 color, bool UI = false)
         {
             Matrix4x4 trans;
             Matrix4x4 sca;
@@ -60,7 +61,7 @@ namespace _2DGameMaker.Rendering.Sprites
 
             shader.Use();
             shader.SetMatrix4x4("projection", cam.GetProjectionMatrix(), false);
-            shader.SetVector3f("spriteColor", color, false);
+            shader.SetVector3f("spriteColor", color.GetVector(), false);
 
             glActiveTexture(GL_TEXTURE0);
             texture.Bind();
@@ -86,7 +87,7 @@ namespace _2DGameMaker.Rendering.Sprites
             glDrawArrays(GL_TRIANGLES, 0, vertices.Length);
         }
 
-        public unsafe void initRenderData()
+        public static unsafe void InitRenderData()
         {
             uint VBO = 0;
             quadVAO = glGenVertexArray();

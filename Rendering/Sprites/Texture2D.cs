@@ -7,7 +7,7 @@ using static _2DGameMaker.OpenGL.GL;
 
 namespace _2DGameMaker.Rendering.Sprites
 {
-    class Texture2D
+    public class Texture2D
     {
         public uint ID;
 

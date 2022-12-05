@@ -25,5 +25,32 @@ namespace _2DGameMaker.Utils.Math
 
             return (byte)input;
         }
+
+        public static float Lerp(float value, float secondValue, float by)
+        {
+            return value * (1 - by) + secondValue * by;
+        }
+
+        /// <summary>
+        /// Wraps value to lower limit if it is greater than the upper limit and vice versa.
+        /// </summary>
+        /// <param name="value">Value to wrap.</param>
+        /// <param name="LowerLimit">Lower limit.</param>
+        /// <param name="UpperLimit">Upper limit.</param>
+        /// <returns>Wrapped value.</returns>
+        public static float ClampSet(float value, float lowerLimit, float upperLimit)
+        {
+            if(value > upperLimit)
+            {
+                 return lowerLimit;
+            }
+            
+            if(value < lowerLimit)
+            {
+                return upperLimit;
+            }
+
+            return value;
+        }
     }
 }

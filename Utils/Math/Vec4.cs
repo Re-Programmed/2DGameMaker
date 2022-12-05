@@ -5,6 +5,7 @@ namespace _2DGameMaker.Utils.Math
     public class Vec4 : Vec3
     {
         public static new readonly Vec4 Zero = new Vec4(0, 0, 0, 0);
+        public static new readonly Vec4 One = new Vec4(1, 1, 1, 1);
 
         public float W { get; protected set; }
 
