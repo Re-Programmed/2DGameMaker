@@ -14,7 +14,8 @@ namespace _2DGameMaker.Utils.AssetManagment
         enum ResourceType:byte
         {
             DATA = 1,
-            PNG_IMAGE = 56
+            PNG_IMAGE = 56,
+            AUDIO = 4
         }
 
         //H prefix = hex number
@@ -67,6 +68,11 @@ namespace _2DGameMaker.Utils.AssetManagment
                         case ResourceType.PNG_IMAGE:
                             keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), DecodePng(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA), true));
                             break;
+                            /*
+                        case ResourceType.AUDIO:
+                            keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), DecodeAudio(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA)));
+                            break;
+                            */
                         case ResourceType.DATA:
                             Dictionary<string, object> ret = DataDecode(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA), keyValues);
                             int i = ret.Count - 1;
@@ -143,8 +149,12 @@ namespace _2DGameMaker.Utils.AssetManagment
             return image;
         }
 
+        /*
+        public static AudioClip DecodeAudio(string b64)
+        {
 
-
+        }
+        */
 
 
         public static Dictionary<string, SpriteShader> SpriteShaders = new Dictionary<string, SpriteShader>();
