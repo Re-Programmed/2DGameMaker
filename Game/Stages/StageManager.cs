@@ -23,7 +23,7 @@ namespace _2DGameMaker.Game.Stages
         {
             foreach (StageObject obj in stages[name].objects)
             {
-                Game.INSTANCE.Instantiate(obj.GetObject(), 1);
+                Game.INSTANCE.Instantiate(obj.GetObject(), obj.Layer);
             }
         }
 

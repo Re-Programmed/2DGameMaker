@@ -13,6 +13,7 @@ using _2DGameMaker.Game;
 using _2DGameMaker.Game.Stages;
 using System.IO;
 
+///This namespace can be removed, it is purely for testing.
 namespace _2DGameMaker.TemplateGame
 {
     class TemplateGame : Game.Game

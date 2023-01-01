@@ -16,6 +16,8 @@ namespace _2DGameMaker.Utils.AssetManagment
         {
             DATA = 1,
             PNG_IMAGE = 56,
+            FRAG_SHADER = 2,
+            VERT_SHADER = 3,
             AUDIO = 4,
             STAGE = 5
         }
@@ -51,6 +53,7 @@ namespace _2DGameMaker.Utils.AssetManagment
 
         public static void GetPacks()
         {
+            string vShader = "", fShader = "";
             foreach (string f in Directory.GetFiles(PackDIR))
             {
                 string p_file_name = Path.GetFileNameWithoutExtension(f);
@@ -74,9 +77,15 @@ namespace _2DGameMaker.Utils.AssetManagment
                             break;
 
                         case ResourceType.STAGE:
-                            keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), DecodeB64String(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA)));
+                            keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), "STAGE!" + DecodeB64String(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA)));
                             break;
-                            
+                        case ResourceType.VERT_SHADER:
+                            vShader = "#" + DecodeB64String(getResourceInformation(file_data, ResourceInformation.S_FILE_NAME_D));
+                            break;
+                        case ResourceType.FRAG_SHADER:
+                            fShader = "#" + DecodeB64String(getResourceInformation(file_data, ResourceInformation.S_FILE_NAME_D));
+                            break;
+
                         case ResourceType.DATA:
                             Dictionary<string, object> ret = DataDecode(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA), keyValues);
                             int i = ret.Count - 1;
@@ -90,7 +99,10 @@ namespace _2DGameMaker.Utils.AssetManagment
                             break;
                     }
                 }
+
             }
+
+            LoadSpriteShader(vShader, fShader, "sprite");
         }
 
         /// <summary>
@@ -149,7 +161,7 @@ namespace _2DGameMaker.Utils.AssetManagment
 
         public static string DecodeB64String(string b64)
         {
-            return "STAGE!" + Encoding.Default.GetString(Convert.FromBase64String(b64));
+            return Encoding.Default.GetString(Convert.FromBase64String(b64));
         }
 
         public static ImageResult DecodePng(string b64, bool alpha)
@@ -177,9 +189,9 @@ namespace _2DGameMaker.Utils.AssetManagment
         public static Dictionary<string, SpriteShader> SpriteShaders = new Dictionary<string, SpriteShader>();
         public static Dictionary<string, Dictionary<string, Texture2D>> Textures = new Dictionary<string, Dictionary<string, Texture2D>>();
 
-        public static SpriteShader LoadSpriteShader(string vShaderFile, string fShaderFile, string gShaderFile, string name)
+        public static SpriteShader LoadSpriteShader(string vShaderFile, string fShaderFile, string name)
         {
-            SpriteShaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+            SpriteShaders[name] = loadShaderFromFile(vShaderFile, fShaderFile);
             return SpriteShaders[name];
         }
 
@@ -256,36 +268,10 @@ namespace _2DGameMaker.Utils.AssetManagment
             return texture;
         }
 
-        private static SpriteShader loadShaderFromFile(string vShaderFile, string fShaderFile, string gShaderFile = null)
+        private static SpriteShader loadShaderFromFile(string vShaderFile, string fShaderFile)
         {
-            string vertexCode = "";
-            string fragmentCode = "";
-            string geometryCode = "";
-
-            using (StreamReader reader = new StreamReader(vShaderFile))
-            {
-                vertexCode = reader.ReadToEnd();
-            }
-
-            using (StreamReader reader = new StreamReader(fShaderFile))
-            {
-                fragmentCode = reader.ReadToEnd();
-            }
-
-            if (gShaderFile != null)
-            {
-                using (StreamReader reader = new StreamReader(gShaderFile))
-                {
-                    geometryCode = reader.ReadToEnd();
-                }
-            }
-
-            string vShaderCode = vertexCode;
-            string fShaderCode = fragmentCode;
-            string gShaderCode = geometryCode;
-
             SpriteShader shader = new SpriteShader();
-            shader.Compile(vShaderCode, fShaderCode, gShaderCode != null ? gShaderCode : null);
+            shader.Compile(vShaderFile, fShaderFile);
             return shader;
         }
     }

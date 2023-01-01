@@ -88,6 +88,11 @@ namespace _2DGameMaker.Objects
             this.position += vector;
         }
 
+        public void SetPosition(Vec2 position)
+        {
+            this.position = position;
+        }
+
         public bool GetAlwaysLoad()
         {
             return alwaysLoad;

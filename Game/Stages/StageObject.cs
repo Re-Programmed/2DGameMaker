@@ -11,6 +11,8 @@ namespace _2DGameMaker.Game.Stages
 {
     public struct StageObject
     {
+        public int Layer;
+
         public float[] Position;
         public float[] Scale;
         public float Rotation;
@@ -21,6 +23,7 @@ namespace _2DGameMaker.Game.Stages
 
         public StageObject(GameObject obj, string texture, string dir)
         {
+            Layer = 1;
             Position = obj.GetLocalPosition().GetArray();
             Scale = obj.GetLocalScale().GetArray();
             Rotation = obj.GetLocalRotation();
@@ -38,6 +41,7 @@ namespace _2DGameMaker.Game.Stages
 
         public StageObject(GameObject obj)
         {
+            Layer = 1;
             Position = obj.GetLocalPosition().GetArray();
             Scale = obj.GetLocalScale().GetArray();
             Rotation = obj.GetLocalRotation();

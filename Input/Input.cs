@@ -12,8 +12,12 @@ namespace _2DGameMaker.Input
 {
     static class Input
     {
+        public const int MOUSE_PRESSED = 1, MOUSE_NO_CHANGE = 0, MOUSE_RELEASED = 2;
+
         public delegate void ScrollCallback(Window window, double xoff, double yoff);
         public static ScrollCallback OnScroll;
+
+        private static List<MouseButton> pressedButtons = new List<MouseButton>();
 
         public static bool GetKey(Keys key)
         {
@@ -32,7 +36,32 @@ namespace _2DGameMaker.Input
         {
             return (Glfw.GetMouseButton(DisplayManager.Window, mb) == InputState.Press);
         }
-        
+
+        /// <summary>
+        /// Returns if a mouse button was pressed or released in a given frame.
+        /// </summary>
+        /// <param name="mb">Button to get.</param>
+        /// <returns>If a mouse button was pressed or released in a given frame.</returns>
+        public static int GetMouseButtonEvent(MouseButton mb)
+        {
+            bool pressed = (Glfw.GetMouseButton(DisplayManager.Window, mb) == InputState.Press);
+
+            if (pressedButtons.Contains(mb))
+            {
+                if (pressed) { return MOUSE_NO_CHANGE; }
+                pressedButtons.Remove(mb);
+                return MOUSE_RELEASED;
+            }
+            else
+            {
+                if (!pressed) { return MOUSE_NO_CHANGE; }
+                pressedButtons.Add(mb);
+                return MOUSE_PRESSED;
+            }
+
+            
+        }
+
         public static float[] GetJoystick(Joystick joystick)
         {
             if(Glfw.JoystickPresent(joystick))

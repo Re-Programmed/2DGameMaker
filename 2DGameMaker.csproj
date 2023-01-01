@@ -22,9 +22,9 @@
 
   <ItemGroup>
     <None Remove="Assets\player.pak" />
+    <None Remove="Assets\shaders.pak" />
+    <None Remove="Assets\test_stage.pak" />
     <None Remove="README.md" />
-    <None Remove="Rendering\Shaders\sprite.frag" />
-    <None Remove="Rendering\Shaders\sprite.vs" />
     <None Remove="test_song.ogg" />
     <None Remove="test_song.wav" />
   </ItemGroup>
@@ -33,10 +33,10 @@
     <Content Include="Assets\player.pak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Rendering\Shaders\sprite.frag">
+    <Content Include="Assets\shaders.pak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Rendering\Shaders\sprite.vs">
+    <Content Include="Assets\test_stage.pak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -58,12 +58,6 @@
 
   <ItemGroup>
     <Resource Include="README.md" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Assets\test_stage.pak">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

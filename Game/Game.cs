@@ -30,6 +30,7 @@ namespace _2DGameMaker.Game
         protected ObjectLayer[] objects = new ObjectLayer[] { new ObjectLayer(), new ObjectLayer(), new ObjectLayer() };
 
         protected Camera2d cam;
+        public Camera2d GetCamera() { return cam; }
 
         public delegate void UpdateEvent();
         public UpdateEvent UpdateE;
@@ -39,6 +40,26 @@ namespace _2DGameMaker.Game
             GameTitle = title;
 
             INSTANCE = this;
+        }
+
+
+
+        double lastTime = Glfw.Time;
+        int nbFrames = 0;
+
+        void CalculateFrameRate()
+        {
+            double currentTime = Glfw.Time;
+            nbFrames++;
+            if(currentTime - lastTime >= 1.0)
+            {
+                double msPerFrame = 1000.0 / (double)nbFrames;
+
+                Console.WriteLine("MS PER FRAME: " + msPerFrame);
+
+                nbFrames = 0;
+                lastTime += 1.0;
+            }
         }
 
         public void Run(int width, int height, Monitor? fullscreen = null)
@@ -52,6 +73,9 @@ namespace _2DGameMaker.Game
             {
                 GameTime.DeltaTime = (float)Glfw.Time - GameTime.TotalElapsedSeconds;
                 GameTime.TotalElapsedSeconds = (float)Glfw.Time;
+
+                //REMOVE THIS LATER
+                CalculateFrameRate();
 
                 Update();
 
@@ -77,15 +101,13 @@ namespace _2DGameMaker.Game
         {
             loadCamera();
 
-            AssetManager.LoadSpriteShader(VertexShader, FragShader, null, "sprite");
+            AssetManager.GetPacks();
 
             AssetManager.GetSpriteShader("sprite").Use().SetInt("image", 0, false);
             AssetManager.GetSpriteShader("sprite").SetMatrix4x4("projection", cam.GetProjectionMatrix(), false);
 
             SpriteRenderer.InitShader(AssetManager.GetSpriteShader("sprite"));
             SpriteRenderer.InitRenderData();
-
-            AssetManager.GetPacks();
 
             Input.Input.Init();
         }
@@ -132,7 +154,7 @@ namespace _2DGameMaker.Game
                 {
                     foreach (GameObject obj in objlay.objects)
                     {
-                        if (CollisionCheck.BoxCheck(obj.GetPosition(), cam.FocusPosition, new Vec2(DisplayManager.WindowSize.X + obj.GetScale().X, DisplayManager.WindowSize.Y + obj.GetScale().Y) / cam.Zoom))
+                        if (CollisionCheck.BoxCheck(obj.GetPosition(), cam.FocusPosition, new Vec2(DisplayManager.WindowSize.X + obj.GetScale().X, DisplayManager.WindowSize.Y + obj.GetScale().Y) * 1.5f / cam.Zoom))
                         {
                             if (!obj.GetLoaded())
                             {
