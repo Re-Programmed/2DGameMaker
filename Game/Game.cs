@@ -17,6 +17,8 @@ namespace _2DGameMaker.Game
 {
     public abstract class Game
     {
+        public static Game INSTANCE;
+
         const string VertexShader = "./Shaders/sprite.vs";
         const string FragShader = "./Shaders/sprite.frag";
 
@@ -29,9 +31,14 @@ namespace _2DGameMaker.Game
 
         protected Camera2d cam;
 
+        public delegate void UpdateEvent();
+        public UpdateEvent UpdateE;
+
         public Game(string title)
         {
             GameTitle = title;
+
+            INSTANCE = this;
         }
 
         public void Run(int width, int height, Monitor? fullscreen = null)
@@ -50,7 +57,7 @@ namespace _2DGameMaker.Game
 
                 Glfw.PollEvents();
 
-                RenderScreen();
+                renderScreen();
 
                 LateUpdate();
             }
@@ -68,7 +75,7 @@ namespace _2DGameMaker.Game
 
         protected virtual void LoadContent()
         {
-            cam = new Camera2d(Vec2.Zero, 1f);
+            loadCamera();
 
             AssetManager.LoadSpriteShader(VertexShader, FragShader, null, "sprite");
 
@@ -79,13 +86,22 @@ namespace _2DGameMaker.Game
             SpriteRenderer.InitRenderData();
 
             AssetManager.GetPacks();
+
+            Input.Input.Init();
+        }
+
+        protected virtual void loadCamera()
+        {
+            cam = new Camera2d(Vec2.Zero, 1f);
         }
 
         protected abstract void Init();
 
         protected virtual void Update()
         {
-            if(instantiations.Count > 0)
+            UpdateE?.Invoke();
+
+            if (instantiations.Count > 0)
             {
                 foreach (KeyValuePair<GameObject, int> valuePair in instantiations)
                 {
@@ -96,9 +112,9 @@ namespace _2DGameMaker.Game
             }
         }
 
-        protected void RenderScreen()
+        protected void renderScreen()
         {
-            ClearColor();
+            clearWindow();
             glClear(GL_COLOR_BUFFER_BIT);
 
             glBindVertexArray(SpriteRenderer.quadVAO);
@@ -116,13 +132,13 @@ namespace _2DGameMaker.Game
                 {
                     foreach (GameObject obj in objlay.objects)
                     {
-                        if (CollisionCheck.BoxCheck(obj.GetPosition(), cam.FocusPosition, new Vec2(DisplayManager.WindowSize.X, DisplayManager.WindowSize.Y)))
+                        if (CollisionCheck.BoxCheck(obj.GetPosition(), cam.FocusPosition, new Vec2(DisplayManager.WindowSize.X + obj.GetScale().X, DisplayManager.WindowSize.Y + obj.GetScale().Y) / cam.Zoom))
                         {
                             if (!obj.GetLoaded())
                             {
                                 obj.SetLoaded(true);
                             }
-                            SpriteRenderer.DrawSprite(cam, obj, obj.texture.GetTexture(), obj.texture.GetColor());
+                            SpriteRenderer.DrawSprite(cam, obj, obj.Texture.GetTexture(), obj.Texture.GetColor());
                         }
                         else if (obj.GetLoaded() && !obj.GetAlwaysLoad())
                         {
@@ -146,7 +162,7 @@ namespace _2DGameMaker.Game
 
 
 
-        private void ClearColor()
+        private void clearWindow()
         {
             glClearColor(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W);
         }

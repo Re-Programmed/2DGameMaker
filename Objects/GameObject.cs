@@ -1,4 +1,5 @@
-﻿using _2DGameMaker.Utils.Math;
+﻿using _2DGameMaker.Objects.Scripting;
+using _2DGameMaker.Utils.Math;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,16 +17,18 @@ namespace _2DGameMaker.Objects
 
         private bool isLoaded;
 
-        public ObjectTexture texture { get; private set; }
+        public List<ObjectAppendedScript> ObjectAppenedScripts { get; protected set; } = new List<ObjectAppendedScript>();
 
-        public void SetTexture(ObjectTexture texture) { this.texture = texture; }
+        public ObjectTexture Texture { get; private set; }
+
+        public void SetTexture(ObjectTexture texture) { this.Texture = texture; }
 
         public GameObject(Vec2 position, Vec2 scale, float rotation, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null)
         {
             this.position = position;
             this.scale = scale;
             this.rotation = rotation;
-            this.texture = texture;
+            this.Texture = texture;
             this.parent = parent;
             this.alwaysLoad = alwaysLoad;
         }
@@ -35,7 +38,7 @@ namespace _2DGameMaker.Objects
             this.position = position;
             scale = new Vec2(texture.GetTexture().Width, texture.GetTexture().Height);
             this.rotation = rotation;
-            this.texture = texture;
+            this.Texture = texture;
             this.parent = parent;
             this.alwaysLoad = alwaysLoad;
         }
@@ -44,11 +47,11 @@ namespace _2DGameMaker.Objects
         {
             this.position = position;
             scale = new Vec2(texture.GetTexture().Width, texture.GetTexture().Height);
-            this.texture = texture;
+            this.Texture = texture;
             this.parent = parent;
             this.alwaysLoad = alwaysLoad;
         }
-
+        
         public Vec2 GetPosition()
         {
             if (parent != null) { return parent.GetPosition() + position; }
@@ -80,6 +83,11 @@ namespace _2DGameMaker.Objects
             this.rotation = Math.ClampSet(this.rotation, 0f, 259f);
         }
 
+        public void Translate(Vec2 vector)
+        {
+            this.position += vector;
+        }
+
         public bool GetAlwaysLoad()
         {
             return alwaysLoad;
@@ -92,6 +100,16 @@ namespace _2DGameMaker.Objects
                 isLoaded = loaded;
                 if (loaded) { OnLoad(); } else { OnDisable(); }
             }
+        }
+
+        internal void AppendScript(ObjectAppendedScript oas)
+        {
+            ObjectAppenedScripts.Add(oas);
+        }
+
+        internal void RemoveScript(ObjectAppendedScript oas)
+        {
+            ObjectAppenedScripts.Remove(oas);
         }
 
         public bool GetLoaded() { return isLoaded; }

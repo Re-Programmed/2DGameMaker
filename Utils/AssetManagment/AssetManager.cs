@@ -5,6 +5,7 @@ using System.IO;
 using StbImageSharp;
 using _2DGameMaker.Rendering.Sprites;
 using static _2DGameMaker.OpenGL.GL;
+using _2DGameMaker.Game.Stages;
 
 namespace _2DGameMaker.Utils.AssetManagment
 {
@@ -15,7 +16,8 @@ namespace _2DGameMaker.Utils.AssetManagment
         {
             DATA = 1,
             PNG_IMAGE = 56,
-            AUDIO = 4
+            AUDIO = 4,
+            STAGE = 5
         }
 
         //H prefix = hex number
@@ -61,26 +63,26 @@ namespace _2DGameMaker.Utils.AssetManagment
                 {
                     string[] file_data = fd.Split(" ");
 
-                    Console.WriteLine("FILE LOCATED: " + getResourceInformationH(file_data, ResourceInformation.H_FILE_TYPE) + ", " + getResourceInformationH(file_data, ResourceInformation.H_FILE_ID));
-
                     switch ((ResourceType)getResourceInformationH(file_data, ResourceInformation.H_FILE_TYPE))
                     {
                         case ResourceType.PNG_IMAGE:
                             keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), DecodePng(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA), true));
                             break;
-                            /*
+                            
                         case ResourceType.AUDIO:
                             keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), DecodeAudio(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA)));
                             break;
-                            */
+
+                        case ResourceType.STAGE:
+                            keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), DecodeB64String(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA)));
+                            break;
+                            
                         case ResourceType.DATA:
                             Dictionary<string, object> ret = DataDecode(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA), keyValues);
                             int i = ret.Count - 1;
-                            foreach(KeyValuePair<string, object> ret_v in ret)
+                            foreach (KeyValuePair<string, object> ret_v in ret)
                             {
-                                Console.WriteLine(ret_v.Key);
-
-                                AddFileToSystem(ret_v.Value, i == 0 ? ret_v.Key : ret_v.Key.Remove(ret_v.Key.Length - 1), p_file_name);
+                                AddFileToSystem(ret_v.Value, i == 0 ? ret_v.Key : ret_v.Key.Remove(ret_v.Key.Length - 1), p_file_name, new string[] { f });
                                 i--;
                             }
                             break; 
@@ -101,8 +103,18 @@ namespace _2DGameMaker.Utils.AssetManagment
                 case ImageResult image:
                     LoadTexture(image, true, name, pack_file_name);
                     break;
-                default:
+                case byte[] audio:
+                    //SoundManager.InitSound(name, audio, attributes[0]);
                     break;
+                case string str:
+                    if (str.StartsWith("STAGE!"))
+                    {
+                        StageManager.LoadStage(str.Remove(0, 6), name);
+                        break;
+                    }
+                    break;
+                default:
+                   break;
             }
         }
 
@@ -135,6 +147,11 @@ namespace _2DGameMaker.Utils.AssetManagment
             return return_d;
         }
 
+        public static string DecodeB64String(string b64)
+        {
+            return "STAGE!" + Encoding.Default.GetString(Convert.FromBase64String(b64));
+        }
+
         public static ImageResult DecodePng(string b64, bool alpha)
         {
             ImageResult image;
@@ -149,12 +166,12 @@ namespace _2DGameMaker.Utils.AssetManagment
             return image;
         }
 
-        /*
-        public static AudioClip DecodeAudio(string b64)
+        
+        public static byte[] DecodeAudio(string b64)
         {
-
+            return Convert.FromBase64String(b64);
         }
-        */
+        
 
 
         public static Dictionary<string, SpriteShader> SpriteShaders = new Dictionary<string, SpriteShader>();

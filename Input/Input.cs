@@ -12,6 +12,9 @@ namespace _2DGameMaker.Input
 {
     static class Input
     {
+        public delegate void ScrollCallback(Window window, double xoff, double yoff);
+        public static ScrollCallback OnScroll;
+
         public static bool GetKey(Keys key)
         {
             return (Glfw.GetKey(DisplayManager.Window, key) == InputState.Press);
@@ -48,6 +51,14 @@ namespace _2DGameMaker.Input
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Inits callbacks.
+        /// </summary>
+        public static void Init()
+        {
+            Glfw.SetScrollCallback(DisplayManager.Window, (Window w, double offX, double offY) => { OnScroll?.Invoke(w, offX, offY); });
         }
     }
 }

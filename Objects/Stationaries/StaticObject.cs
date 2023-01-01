@@ -5,7 +5,7 @@ using System.Text;
 
 namespace _2DGameMaker.Objects.Stationaries
 {
-    class StaticObject : GameObject
+    public class StaticObject : GameObject
     {
         #region Constructors
         public StaticObject(Vec2 position, Vec2 scale, float rotation, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null)
@@ -19,6 +19,7 @@ namespace _2DGameMaker.Objects.Stationaries
         public StaticObject(Vec2 position, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null)
             : base(position, texture, alwaysLoad, parent)
         { }
+
         #endregion
 
         protected override void OnDisable()

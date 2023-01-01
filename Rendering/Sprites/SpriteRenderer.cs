@@ -53,11 +53,11 @@ namespace _2DGameMaker.Rendering.Sprites
             }
             else
             {
-                trans = Matrix4x4.CreateTranslation(obj.GetPosition().X + (obj.texture.GetFlipped() ? obj.GetScale().X : 0), obj.GetPosition().Y, 0);
+                trans = Matrix4x4.CreateTranslation(obj.GetPosition().X + (obj.Texture.GetFlipped() ? obj.GetScale().X : 0), obj.GetPosition().Y, 0);
                 sca = Matrix4x4.CreateScale(obj.GetScale().X, obj.GetScale().Y, 1);
             }
 
-            if (obj.texture.GetFlipped()) { shader.SetMatrix4x4("model", sca * rot * trans * FlipMat, false); } else { shader.SetMatrix4x4("model", sca * rot * trans, false); }
+            if (obj.Texture.GetFlipped()) { shader.SetMatrix4x4("model", sca * rot * trans * FlipMat, false); } else { shader.SetMatrix4x4("model", sca * rot * trans, false); }
 
             shader.Use();
             shader.SetMatrix4x4("projection", cam.GetProjectionMatrix(), false);
