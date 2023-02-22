@@ -21,10 +21,15 @@ namespace _2DGameMaker.Utils.Math
         }
 
         public static Vec2 operator +(Vec2 a, Vec2 b) => new Vec2(a.X + b.X, a.Y + b.Y);
+        public static Vec2 operator +(Vec2 a, float b) => new Vec2(a.X + b, a.Y + b);
         public static Vec2 operator *(Vec2 a, Vec2 b) => new Vec2(a.X * b.X, a.Y * b.Y);
         public static Vec2 operator *(Vec2 a, float b) => new Vec2(a.X * b, a.Y * b);
         public static Vec2 operator /(Vec2 a, float b) => new Vec2(a.X / b, a.Y / b);
+        public static Vec2 operator /(Vec2 a, Vec2 b) => new Vec2(a.X / b.X, a.Y / b.Y);
         public static Vec2 operator -(Vec2 a, Vec2 b) => new Vec2(a.X - b.X, a.Y - b.Y);
+        public static Vec2 operator -(Vec2 a) => new Vec2(-a.X, -a.Y);
+        public static Vec2 operator -(Vec2 a, float b) => new Vec2(a.X - b, a.Y - b);
+
 
         public Vec2 Lerp(Vec2 target, float speed)
         {
@@ -34,9 +39,39 @@ namespace _2DGameMaker.Utils.Math
             return this;
         }
 
+        public static Vec2 InverseY(Vec2 vec2)
+        {
+            return new Vec2(vec2.X, -vec2.Y);
+        }
+
+        public void AddY(float value)
+        {
+            Y += value;
+        }
+
+        public void AddX(float value)
+        {
+            X += value;
+        }
+
+        public void SetX(float value)
+        {
+            X = value;
+        }
+
+        public void SetY(float value)
+        {
+            Y = value;
+        }
+
         public float[] GetArray()
         {
             return new float[2] { X, Y };
+        }
+
+        public override string ToString()
+        {
+            return "Vec2 [" + X + ", " + Y + "]";
         }
     }
 }

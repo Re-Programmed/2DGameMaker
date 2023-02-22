@@ -26,5 +26,15 @@ namespace _2DGameMaker.Objects.Scripting
         protected abstract void init();
         protected abstract void update();
         protected abstract void destroy();
+
+        public virtual void OnLoad()
+        {
+            
+        }
+
+        public virtual void OnDisable()
+        {
+
+        }
     }
 }

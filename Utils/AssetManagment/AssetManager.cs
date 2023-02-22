@@ -229,7 +229,7 @@ namespace _2DGameMaker.Utils.AssetManagment
 
         public static Texture2D GetTexture(string name, string dictionary)
         {
-            return Textures[dictionary][name];
+             return Textures[dictionary][name];
         }
 
         public static bool TextureExists(string name, string dictionary)

@@ -4,20 +4,20 @@ using System.Text;
 using _2DGameMaker.Rendering.Cameras;
 using _2DGameMaker.Utils.Math;
 
-namespace _2DGameMaker.TemplateGame
+namespace _2DGameMaker.Utils
 {
     public class MoveableCamera : Camera2d
     {
         public MoveableCamera(Vec2 focusPosition, float zoom)
-            :base(focusPosition, zoom)
+            : base(focusPosition, zoom)
         {
-            TemplateGame.INSTANCE.UpdateE += update;
+            Game.Game.INSTANCE.UpdateE += update;
             Input.Input.OnScroll += onScroll;
         }
-        
+
         ~MoveableCamera()
         {
-            TemplateGame.INSTANCE.UpdateE -= update;
+            Game.Game.INSTANCE.UpdateE -= update;
             Input.Input.OnScroll -= onScroll;
         }
 
@@ -46,7 +46,7 @@ namespace _2DGameMaker.TemplateGame
 
         private void onScroll(GLFW.Window w, double x, double y)
         {
-            Zoom += (float)y/100f;
+            Zoom += (float)y / 100f;
         }
 
     }

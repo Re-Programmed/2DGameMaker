@@ -17,13 +17,16 @@ namespace _2DGameMaker.Objects
 
         private bool isLoaded;
 
+        readonly bool isUI = false;
+        public bool IsUI() { return isUI ? true : (parent == null) ? false : parent.IsUI(); }
+
         public List<ObjectAppendedScript> ObjectAppenedScripts { get; protected set; } = new List<ObjectAppendedScript>();
 
         public ObjectTexture Texture { get; private set; }
 
         public void SetTexture(ObjectTexture texture) { this.Texture = texture; }
 
-        public GameObject(Vec2 position, Vec2 scale, float rotation, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null)
+        public GameObject(Vec2 position, Vec2 scale, float rotation, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null, bool isUI = false)
         {
             this.position = position;
             this.scale = scale;
@@ -31,9 +34,10 @@ namespace _2DGameMaker.Objects
             this.Texture = texture;
             this.parent = parent;
             this.alwaysLoad = alwaysLoad;
+            this.isUI = isUI;
         }
 
-        public GameObject(Vec2 position, float rotation, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null)
+        public GameObject(Vec2 position, float rotation, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null, bool isUI = false)
         {
             this.position = position;
             scale = new Vec2(texture.GetTexture().Width, texture.GetTexture().Height);
@@ -41,15 +45,17 @@ namespace _2DGameMaker.Objects
             this.Texture = texture;
             this.parent = parent;
             this.alwaysLoad = alwaysLoad;
+            this.isUI = isUI;
         }
 
-        public GameObject(Vec2 position, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null)
+        public GameObject(Vec2 position, ObjectTexture texture, bool alwaysLoad = false, GameObject parent = null, bool isUI = false)
         {
             this.position = position;
             scale = new Vec2(texture.GetTexture().Width, texture.GetTexture().Height);
             this.Texture = texture;
             this.parent = parent;
             this.alwaysLoad = alwaysLoad;
+            this.isUI = isUI;
         }
         
         public Vec2 GetPosition()
@@ -71,6 +77,12 @@ namespace _2DGameMaker.Objects
             if (parent != null) { return parent.GetRotation() + rotation; }
             return rotation;
         }
+
+        public void SetRotation(float rotation)
+        {
+            this.rotation = rotation;
+        }
+
         public float GetLocalRotation() { return rotation; }
 
         /// <summary>
@@ -91,6 +103,11 @@ namespace _2DGameMaker.Objects
         public void SetPosition(Vec2 position)
         {
             this.position = position;
+        }
+
+        public void SetScale(Vec2 scale)
+        {
+            this.scale = scale;
         }
 
         public bool GetAlwaysLoad()
@@ -119,8 +136,21 @@ namespace _2DGameMaker.Objects
 
         public bool GetLoaded() { return isLoaded; }
 
-        protected abstract void OnLoad();
-        protected abstract void OnDisable();
+        protected virtual void OnLoad()
+        {
+            foreach (ObjectAppendedScript oas in ObjectAppenedScripts)
+            {
+                oas.OnLoad();
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            foreach (ObjectAppendedScript oas in ObjectAppenedScripts)
+            {
+                oas.OnDisable();
+            }
+        }
 
         
     }

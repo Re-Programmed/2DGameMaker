@@ -35,6 +35,8 @@ namespace _2DGameMaker.Game
         public delegate void UpdateEvent();
         public UpdateEvent UpdateE;
 
+        public Vec2 CurrMousePositionWorldCoords { get; private set; } = Vec2.Zero;
+
         public Game(string title)
         {
             GameTitle = title;
@@ -75,7 +77,7 @@ namespace _2DGameMaker.Game
                 GameTime.TotalElapsedSeconds = (float)Glfw.Time;
 
                 //REMOVE THIS LATER
-                CalculateFrameRate();
+                //CalculateFrameRate();
 
                 Update();
 
@@ -102,6 +104,7 @@ namespace _2DGameMaker.Game
             loadCamera();
 
             AssetManager.GetPacks();
+            Sound.SoundManager.LoadSounds();
 
             AssetManager.GetSpriteShader("sprite").Use().SetInt("image", 0, false);
             AssetManager.GetSpriteShader("sprite").SetMatrix4x4("projection", cam.GetProjectionMatrix(), false);
@@ -122,6 +125,8 @@ namespace _2DGameMaker.Game
         protected virtual void Update()
         {
             UpdateE?.Invoke();
+
+            CurrMousePositionWorldCoords = cam.MouseToWorldCoords(Input.Input.GetMousePosition());
 
             if (instantiations.Count > 0)
             {
@@ -160,7 +165,7 @@ namespace _2DGameMaker.Game
                             {
                                 obj.SetLoaded(true);
                             }
-                            SpriteRenderer.DrawSprite(cam, obj, obj.Texture.GetTexture(), obj.Texture.GetColor());
+                            SpriteRenderer.DrawSprite(cam, obj, obj.Texture.GetTexture(), obj.Texture.GetColor(), obj.IsUI());
                         }
                         else if (obj.GetLoaded() && !obj.GetAlwaysLoad())
                         {

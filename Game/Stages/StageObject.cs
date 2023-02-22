@@ -59,22 +59,26 @@ namespace _2DGameMaker.Game.Stages
 
         public StaticObject GetObject()
         {
-            StaticObject so = new StaticObject(new Vec2(Position[0], Position[1]), new Vec2(Scale[0], Scale[1]), Rotation, new ObjectTexture(AssetManager.GetTexture(Texture[0], Texture[1])));
+            ObjectTexture texture = new ObjectTexture(AssetManager.GetTexture(Texture[0], Texture[1]));
+            StaticObject so = new StaticObject(new Vec2(Position[0], Position[1]), Scale.Length == 2 ? new Vec2(Scale[0], Scale[1]) : new Vec2(texture.GetTexture().Width, texture.GetTexture().Height), Rotation, texture);
 
-            foreach (StageComponent comp in Components)
+            if (Components != null)
             {
-                Type t = Type.GetType(comp.Name);
-                object[] args = new object[comp.Args.Length + 1]; 
-
-                for (int i = 1; i <= comp.Args.Length; i++)
+                foreach (StageComponent comp in Components)
                 {
-                    args[i] = comp.Args[i - 1];
+                    Type t = Type.GetType(comp.Name);
+                    object[] args = new object[comp.Args.Length + 1];
+
+                    for (int i = 1; i <= comp.Args.Length; i++)
+                    {
+                        args[i] = comp.Args[i - 1];
+                    }
+
+                    args[0] = so;
+
+                    ObjectAppendedScript inst = (ObjectAppendedScript)Activator.CreateInstance(t, args);
+                    so.AppendScript(inst);
                 }
-
-                args[0] = so;
-
-                ObjectAppendedScript inst = (ObjectAppendedScript)Activator.CreateInstance(t, args);
-                so.AppendScript(inst);
             }
 
             return so;

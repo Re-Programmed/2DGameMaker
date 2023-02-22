@@ -24,6 +24,23 @@ namespace _2DGameMaker.Input
             return (Glfw.GetKey(DisplayManager.Window, key) == InputState.Press);
         }
 
+        public static int GetNumberKey()
+        {
+            if (GetKey(Keys.Alpha0)) { return 0; } else
+            if (GetKey(Keys.Alpha1)) { return 1; } else
+            if (GetKey(Keys.Alpha2)) { return 2; } else
+            if (GetKey(Keys.Alpha3)) { return 3; } else
+            if (GetKey(Keys.Alpha4)) { return 4; } else
+            if (GetKey(Keys.Alpha5)) { return 5; } else
+            if (GetKey(Keys.Alpha6)) { return 6; } else
+            if (GetKey(Keys.Alpha7)) { return 7; } else
+            if (GetKey(Keys.Alpha8)) { return 8; } else
+            if (GetKey(Keys.Alpha9)) { return 9; } else
+            if (GetKey(Keys.Minus)) { return -2; }
+
+            return -1;
+        }
+
         public static Vector2 GetMousePosition()
         {
             double x = -1, y = -1;

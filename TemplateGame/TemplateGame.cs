@@ -12,12 +12,17 @@ using System.Windows.Media;
 using _2DGameMaker.Game;
 using _2DGameMaker.Game.Stages;
 using System.IO;
+using _2DGameMaker.Sound;
+using _2DGameMaker.Utils;
 
 ///This namespace can be removed, it is purely for testing.
 namespace _2DGameMaker.TemplateGame
 {
+
     class TemplateGame : Game.Game
     {
+        private const string DRPC_ID = "995784691179331584";
+
         private Random randomBG = new Random();
 
         public TemplateGame(string title)
@@ -42,7 +47,7 @@ namespace _2DGameMaker.TemplateGame
         {
             SetClearColor(new Vec4((float)randomBG.NextDouble(), (float)randomBG.NextDouble(), (float)randomBG.NextDouble(), 0));
 
-            RPCManager.Initialize("995784691179331584", new RichPresence()
+            RPCManager.Initialize(DRPC_ID, new RichPresence()
             {
                 Timestamps = new Timestamps(DateTime.UtcNow),
                 Details = "Testing.",
@@ -65,11 +70,15 @@ namespace _2DGameMaker.TemplateGame
             Instantiate(test_object[2], 1);
             */
 
-            StageManager.GenerateStage("test_stage");
+            //StageManager.GenerateStage("test_stage");
 
             //SoundManager.GetSoundById("t_test_music").Play(true);
 
             //StageManager.SaveStageInstance(StageManager.ConvertObjectArray(test_object));
+
+            //SoundManager.GetSound("testing", "test_sound").Play();
+
+            StageManager.GenerateStage("ar1");
         }
 
         protected override void LateUpdate()

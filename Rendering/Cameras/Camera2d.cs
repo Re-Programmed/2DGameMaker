@@ -6,6 +6,8 @@ using GLFW;
 using _2DGameMaker.Rendering.Display;
 using _2DGameMaker.Game;
 using _2DGameMaker.Utils.Math;
+using _2DGameMaker.Objects;
+using _2DGameMaker.Objects.Stationaries;
 
 #pragma warning disable
 
@@ -51,6 +53,7 @@ namespace _2DGameMaker.Rendering.Cameras
         public void LerpTwards(Vec2 target, float speed)
         {
             FocusPosition.Lerp(target, speed);
+            
         }
 
         Vec2 LerpGrid;

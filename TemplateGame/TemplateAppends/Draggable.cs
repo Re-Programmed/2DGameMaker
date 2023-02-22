@@ -1,6 +1,7 @@
 ﻿using _2DGameMaker.Objects;
 using _2DGameMaker.Objects.Collisions;
 using _2DGameMaker.Objects.Scripting;
+using _2DGameMaker.Utils.AssetManagment;
 using _2DGameMaker.Utils.Math;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,18 @@ namespace _2DGameMaker.TemplateGame.TemplateAppends
 {
     public class Draggable : ObjectAppendedScript
     {
+
         bool dragging = false;
 
-        public Draggable(GameObject gameObject)
-            :base(gameObject)
+        public Draggable(GameObject gameObject, string saveID)
+            : base(gameObject)
         {
-
+            
         }
 
         protected override void destroy()
         {
-
+            
         }
 
         protected override void init()
