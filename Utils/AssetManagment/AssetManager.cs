@@ -19,7 +19,8 @@ namespace _2DGameMaker.Utils.AssetManagment
             FRAG_SHADER = 2,
             VERT_SHADER = 3,
             AUDIO = 4,
-            STAGE = 5
+            STAGE = 5,
+            BEATMAP = 6
         }
 
         //H prefix = hex number

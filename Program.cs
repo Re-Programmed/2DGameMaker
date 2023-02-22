@@ -28,6 +28,12 @@ namespace _2DGameMaker
 
         static void Main(string[] args)
         {
+            /*Testing*/
+
+            Utils.BeatReadr.BeatReader.Init();
+
+            /*End Testing*/
+
             //Run on start
             AppDataManager.RegisterAppDataFolder(APPLICATION_NAME, COMPANY_NAME);
             AppDataManager.LoadFiles();
