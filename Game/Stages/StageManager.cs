@@ -19,12 +19,41 @@ namespace _2DGameMaker.Game.Stages
             stages.Add(name, XMLManager.LoadFromXMLString<Stage>(XMLText));
         }
 
+        public static Stage? RegisterStage(string name, Stage stage)
+        {
+            if (!stages.ContainsKey(name))
+            {
+                stages.Add(name, stage);
+                return stage;
+            }
+
+            return null;
+        }
+
         public static void GenerateStage(string name)
         {
             foreach (StageObject obj in stages[name].objects)
             {
                 Game.INSTANCE.Instantiate(obj.GetObject(), obj.Layer);
             }
+        }
+
+        public static void GenerateStage(string name, out GameObject[] gameObjects)
+        {
+            List<GameObject> go = new List<GameObject>();
+            foreach (StageObject obj in stages[name].objects)
+            {
+                GameObject o = obj.GetObject();
+                go.Add(o);
+                Game.INSTANCE.Instantiate(o, obj.Layer);
+            }
+
+            gameObjects = go.ToArray();
+        }
+
+        public static StageObject[] GetStageObjects(string name)
+        {
+            return stages[name].objects;
         }
 
         public static void SaveStageInstance(StageObject[] objects)

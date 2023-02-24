@@ -21,18 +21,14 @@ namespace _2DGameMaker
     {
         public static CommonSaveData CommonSaveData;
         public const string COMPANY_NAME = "Re_Programmed";
-        public const string APPLICATION_NAME = "Template Game";
+        public const string APPLICATION_NAME = "TemplateGame";
 
         public delegate void ProgramClose();
         public static ProgramClose Close;
 
         static void Main(string[] args)
         {
-            /*Testing*/
 
-            Utils.BeatReadr.BeatReader.Init();
-
-            /*End Testing*/
 
             //Run on start
             AppDataManager.RegisterAppDataFolder(APPLICATION_NAME, COMPANY_NAME);

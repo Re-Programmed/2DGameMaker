@@ -94,9 +94,15 @@ namespace _2DGameMaker.Game
         }
 
         private Dictionary<GameObject, int> instantiations = new Dictionary<GameObject, int>();
+        private Dictionary<GameObject, int> destructions = new Dictionary<GameObject, int>();
         public void Instantiate(GameObject obj, int layer)
         {
             instantiations.Add(obj, layer);
+        }
+
+        public void Destroy(GameObject obj, int layer)
+        {
+            destructions.Add(obj, layer);
         }
 
         protected virtual void LoadContent()
@@ -136,6 +142,18 @@ namespace _2DGameMaker.Game
                 }
 
                 instantiations.Clear();
+            }
+
+            if (destructions.Count > 0)
+            {
+                foreach (KeyValuePair<GameObject, int> obj in destructions)
+                {
+                    objects[obj.Value].objects.Remove(obj.Key);
+
+                    obj.Key.SetLoaded(false);
+                }
+
+                destructions.Clear();
             }
         }
 

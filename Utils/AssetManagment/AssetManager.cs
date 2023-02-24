@@ -86,6 +86,9 @@ namespace _2DGameMaker.Utils.AssetManagment
                         case ResourceType.FRAG_SHADER:
                             fShader = "#" + DecodeB64String(getResourceInformation(file_data, ResourceInformation.S_FILE_NAME_D));
                             break;
+                        case ResourceType.BEATMAP:
+                            keyValues.Add(getResourceInformationH(file_data, ResourceInformation.H_FILE_ID), "BEATMAP!" + DecodeB64String(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA)));
+                            break;
 
                         case ResourceType.DATA:
                             Dictionary<string, object> ret = DataDecode(getResourceInformation(file_data, ResourceInformation.S_FILE_DATA), keyValues);
@@ -123,7 +126,11 @@ namespace _2DGameMaker.Utils.AssetManagment
                     if (str.StartsWith("STAGE!"))
                     {
                         StageManager.LoadStage(str.Remove(0, 6), name);
-                        break;
+                    }
+
+                    if (str.StartsWith("BEATMAP!"))
+                    {
+                        BeatReadr.BeatReader.AddBeatmap(name, str.Remove(0, 8));
                     }
                     break;
                 default:

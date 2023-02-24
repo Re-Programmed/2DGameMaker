@@ -1,4 +1,5 @@
-﻿using _2DGameMaker.Objects;
+﻿using _2DGameMaker.Game.Stages;
+using _2DGameMaker.Objects;
 using _2DGameMaker.Objects.Collisions;
 using _2DGameMaker.Objects.Scripting.GUI;
 using _2DGameMaker.Objects.Stationaries;
@@ -13,15 +14,20 @@ namespace _2DGameMaker.StageCreator
 {
     public class StageCreator : Game.Game
     {
+        const string LvlCreatorSaveName = "curr_lvl_creator";
+
         public StageCreator(string title)
             : base(title)
         {
 
         }
 
-        protected override void Close()
-        {
+        static List<StageObject> savedObjects = new List<StageObject>();
+        static List<GameObject> relGameObjects = new List<GameObject>();
 
+        protected override void Close()
+        {        
+            AppDataManager.UpdateFile("lvlcreator\\lvldata", new Stage(savedObjects.ToArray()), true);
         }
 
         protected override void loadCamera()
@@ -31,6 +37,26 @@ namespace _2DGameMaker.StageCreator
 
         protected override void Init()
         {
+            
+
+            Stage s;
+            if (AppDataManager.GetFile("lvlcreator\\lvldata" + AppDataManager.B64OverrideSuffix, out s))
+            {
+                if(StageManager.RegisterStage(LvlCreatorSaveName, s) != null)
+                {
+                    GameObject[] go;
+                    StageManager.GenerateStage(LvlCreatorSaveName, out go);
+
+                    foreach(GameObject obj in go)
+                    {
+                        relGameObjects.Add(obj);
+                    }
+
+
+                    savedObjects.AddRange(StageManager.GetStageObjects(LvlCreatorSaveName));
+                }
+            }
+
             GUIEditCreator.InitGUI();
             GUIManager.GUIEventHandler += GUICreatorEvent;
         }
@@ -59,7 +85,7 @@ namespace _2DGameMaker.StageCreator
         bool awaitingNextInput = false;
 
         bool enterWasDown;
-        private void ManageSelectedObject()
+        private void manageSelectedObject()
         {
             if (selectedObject == null) { return; }
 
@@ -131,6 +157,7 @@ namespace _2DGameMaker.StageCreator
                         readingInput = 0;
                     }
 
+                    updateRel(selectedObject);
                     enterWasDown = true;
 
                 }
@@ -188,15 +215,40 @@ namespace _2DGameMaker.StageCreator
                     readingInput = 5;
                     currInput = "";
                 }
+
+                if (Input.Input.GetKey(GLFW.Keys.Delete))
+                {
+                    if (Input.Input.GetKey(GLFW.Keys.LeftControl))
+                    {
+                        StageObject rel = savedObjects[relGameObjects.IndexOf(selectedObject)];
+                        Destroy(selectedObject, rel.Layer);
+
+                        savedObjects.Remove(rel);
+                        relGameObjects.Remove(selectedObject);
+
+                        selectedObject = null;
+                    }
+                }
             }
             
+        }
+
+        private void updateRel(GameObject obj)
+        {
+            StageObject so = savedObjects[relGameObjects.IndexOf(obj)];
+
+            so.Position = obj.GetLocalPosition().GetArray();
+            so.Rotation = obj.GetLocalRotation();
+            so.Scale = obj.GetLocalScale().GetArray();
+
+            savedObjects[relGameObjects.IndexOf(obj)] = so;
         }
 
         protected override void Update()
         {
             base.Update();
 
-            ManageSelectedObject();
+            manageSelectedObject();
 
             if (Input.Input.GetMouseButtonEvent(GLFW.MouseButton.Right) == Input.Input.MOUSE_PRESSED)
             {
@@ -234,7 +286,8 @@ namespace _2DGameMaker.StageCreator
 
                 INSTANCE.Instantiate(so, 1);
 
-                Console.WriteLine(so.GetPosition().ToString());
+                relGameObjects.Add(so);
+                savedObjects.Add(new StageObject(so, code_d[1], code_d[2]));
             }
         }
     }

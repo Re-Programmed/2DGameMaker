@@ -4,17 +4,30 @@ using System.Text;
 
 namespace _2DGameMaker.Utils.BeatReadr
 {
+    public struct BeatEvent
+    {
+
+        public int BPM;
+        public int Beat;
+        
+        public BeatEvent(int bpm, int beat)
+        {
+            BPM = bpm;
+            Beat = beat;
+        }
+    }
+
     public class Beatmap
     {
         /// <summary>
-        /// Dictionary of what beats the BPM is changed on.
+        /// Makeshift dictionary of what beats the BPM is changed on.
         /// </summary>
-        private Dictionary<int, int> BPM;
-        private int Beat = 0;
+        public BeatEvent[] BPM;
+        public int Beat = 0;
 
-        private int Length;
+        public int Length;
 
-        public Beatmap(Dictionary<int, int> bpm, int length)
+        public Beatmap(BeatEvent[] bpm, int length)
         {
             BPM = bpm;
             Length = length;

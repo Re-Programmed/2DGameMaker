@@ -7,9 +7,23 @@ namespace _2DGameMaker.Utils.BeatReadr
 {
     public static class BeatReader
     {
-        public static void Init()
+        public static Dictionary<string, Beatmap> Beatmaps { get; private set; } = new Dictionary<string, Beatmap>();
+
+        public static bool AddBeatmap(string name, Beatmap map)
         {
-            Console.WriteLine(XMLManager.ToXML(new Beatmap(new Dictionary<int, int>() { { 0, 120 }, { 25, 240 } }, 50)));
+            if (!Beatmaps.ContainsKey(name))
+            {
+                Beatmaps.Add(name, map);
+                Console.WriteLine("ADDED MAP: " + name);
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool AddBeatmap(string name, string xmlData)
+        {
+            return AddBeatmap(name, XMLManager.LoadFromXMLString<Beatmap>(xmlData));
         }
     }
 }

@@ -7,12 +7,14 @@ namespace _2DGameMaker.Utils.AssetManagment
 {
     public static class AppDataManager
     {
+        public const string B64OverrideSuffix = "b6d_";
+
         static string directory;
         static Dictionary<string, string> dataFiles = new Dictionary<string, string>();
 
         public static void RegisterAppDataFolder(string applicationName, string companyName = "")
         {
-            string dir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + (companyName == "" ? "\\" : "\\" + companyName) + "\\" + applicationName;
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + (companyName == "" ? "\\" : "\\" + companyName) + "\\" + applicationName;
             directory = dir;
 
             if (Directory.Exists(dir)) { return; }
@@ -30,15 +32,16 @@ namespace _2DGameMaker.Utils.AssetManagment
         /// </summary>
         /// <param name="fileName">The name of the file.</param>
         /// <param name="data">The object to write to the file.</param>
-        public static void UpdateFile(string fileName, object data)
+        public static void UpdateFile(string fileName, object data, bool overrideB64 = false)
         {
-            if(dataFiles.ContainsKey(fileName))
+            string fname =  fileName + (overrideB64 ? B64OverrideSuffix : "");
+            if (dataFiles.ContainsKey(fname))
             {
-                dataFiles[fileName] = XMLManager.ToXML(data);
+                dataFiles[fname] = XMLManager.ToXML(data);
                 return;
             }
 
-            registerFile(fileName, data);
+            registerFile(fname, data);
         }
 
         /// <summary>
@@ -59,6 +62,9 @@ namespace _2DGameMaker.Utils.AssetManagment
             return false;
         }
 
+        /// <summary>
+        /// Saves all the files to the hard drive.
+        /// </summary>
         public static void SaveFiles()
         {
             foreach (KeyValuePair<string, string> fileData in dataFiles)
@@ -66,7 +72,7 @@ namespace _2DGameMaker.Utils.AssetManagment
                 string path = directory + "\\" + fileData.Key + ".00.spak";
 
                 int i = 0;
-                string[] split = fileData.Key.Split("\\");
+                string[] split = fileData.Key.Replace(B64OverrideSuffix, "").Split("\\");
                 foreach (string check in split)
                 {
                     if (i == split.Length - 1) { break; }
@@ -80,16 +86,27 @@ namespace _2DGameMaker.Utils.AssetManagment
 
                 if (!File.Exists(path)) { File.Create(path).Close(); }
 
-                File.WriteAllText(path, Convert.ToBase64String(Encoding.UTF8.GetBytes(fileData.Value)));
+                if (fileData.Key.EndsWith(B64OverrideSuffix))
+                {
+                    File.WriteAllText(path, fileData.Value);
+                }
+                else
+                {
+                    File.WriteAllText(path, Convert.ToBase64String(Encoding.UTF8.GetBytes(fileData.Value)));
+                }
             }
         }
-
+        
+        /// <summary>
+        /// Loads all files from hard drive.
+        /// </summary>
         public static void LoadFiles()
         {
             foreach(string file in Directory.GetFiles(directory, "*", SearchOption.AllDirectories))
             {
-                string s = Encoding.UTF8.GetString(Convert.FromBase64String(File.ReadAllText(file)));
-                dataFiles.Add(file.Replace(directory + "\\", "").Replace(".00.spak", ""), s);
+                string fname = file.Replace(directory + "\\", "").Replace(".00.spak", "");
+                string s = fname.EndsWith(B64OverrideSuffix) ? File.ReadAllText(file) : Encoding.UTF8.GetString(Convert.FromBase64String(File.ReadAllText(file)));
+                dataFiles.Add(fname, s);
             }
         }
     }
