@@ -5,6 +5,7 @@ using _2DGameMaker.Objects.Scripting.GUI;
 using _2DGameMaker.Objects.Stationaries;
 using _2DGameMaker.Utils;
 using _2DGameMaker.Utils.AssetManagment;
+using _2DGameMaker.Utils.BeatReadr;
 using _2DGameMaker.Utils.Math;
 using System;
 using System.Collections.Generic;
@@ -35,9 +36,23 @@ namespace _2DGameMaker.StageCreator
             cam = new MoveableCamera(Vec2.Zero, 1f);
         }
 
+        private static Random random = new Random();
+        private void bmapTick(Beatmap map)
+        {
+            foreach (ObjectLayer ol in objects)
+            {
+                foreach (GameObject obj in ol.objects)
+                {
+                    obj.Texture.SetColor(new Vec4((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 0));
+                }
+            }
+        }
+
         protected override void Init()
         {
-            
+            //Testing Remove Later
+            BeatReader.SetCurrentMap("test_song");
+            BeatReader.Tick += bmapTick;
 
             Stage s;
             if (AppDataManager.GetFile("lvlcreator\\lvldata" + AppDataManager.B64OverrideSuffix, out s))
@@ -246,6 +261,9 @@ namespace _2DGameMaker.StageCreator
 
         protected override void Update()
         {
+            //TESTING (DELETE)
+            BeatReader.Update();
+
             base.Update();
 
             manageSelectedObject();

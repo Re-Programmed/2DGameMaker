@@ -65,6 +65,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Assets\beatmaps.pak">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\general_assets.pak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
