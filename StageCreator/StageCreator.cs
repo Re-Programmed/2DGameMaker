@@ -37,23 +37,9 @@ namespace _2DGameMaker.StageCreator
         }
 
         private static Random random = new Random();
-        private void bmapTick(Beatmap map)
-        {
-            foreach (ObjectLayer ol in objects)
-            {
-                foreach (GameObject obj in ol.objects)
-                {
-                    obj.Texture.SetColor(new Vec4((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 0));
-                }
-            }
-        }
 
         protected override void Init()
         {
-            //Testing Remove Later
-            BeatReader.SetCurrentMap("test_song");
-            BeatReader.Tick += bmapTick;
-
             Stage s;
             if (AppDataManager.GetFile("lvlcreator\\lvldata" + AppDataManager.B64OverrideSuffix, out s))
             {
@@ -261,8 +247,6 @@ namespace _2DGameMaker.StageCreator
 
         protected override void Update()
         {
-            //TESTING (DELETE)
-            BeatReader.Update();
 
             base.Update();
 

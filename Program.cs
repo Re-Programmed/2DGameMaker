@@ -4,6 +4,7 @@ using System.Windows.Media;
 using System.IO;
 using System.Media;
 using _2DGameMaker.Utils.AssetManagment;
+using _2DGameMaker.GAME_NAME;
 
 namespace _2DGameMaker
 {
@@ -38,11 +39,17 @@ namespace _2DGameMaker
             AppDataManager.GetFile("application\\common", out CommonSaveData);
             Console.WriteLine(CommonSaveData.LaunchCount);
 
+            ControlsManager.RegisterDefaults();
+
+            GAME_NAME.GameName gn = new GAME_NAME.GameName();
+            VideoMode videoMode = Glfw.GetVideoMode(Glfw.PrimaryMonitor);
+            gn.Run(videoMode.Width, videoMode.Height, Glfw.PrimaryMonitor);
+
             //TemplateGame.TemplateGame tg = new TemplateGame.TemplateGame(APPLICATION_NAME);
             //tg.Run(1920, 1080, Glfw.PrimaryMonitor);
 
-            StageCreator.StageCreator sc = new StageCreator.StageCreator(APPLICATION_NAME);
-            sc.Run(1920, 1080, Glfw.PrimaryMonitor);
+            //StageCreator.StageCreator sc = new StageCreator.StageCreator(APPLICATION_NAME);
+            //sc.Run(1920, 1080, Glfw.PrimaryMonitor);
 
 
             AppDataManager.UpdateFile("application\\common", new CommonSaveData(CommonSaveData.LaunchCount + 1));
