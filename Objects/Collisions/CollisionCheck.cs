@@ -43,6 +43,17 @@ namespace _2DGameMaker.Objects.Collisions
         }
 
         /// <summary>
+        /// Returns the distance between two vectors.
+        /// </summary>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <returns></returns>
+        public static float Distance(Vec2 p1, Vec2 p2)
+        {
+            return MathF.Sqrt(MathF.Pow(MathF.Abs(p1.X - p2.X) + MathF.Abs(p1.Y - p2.Y), 2));
+        }
+
+        /// <summary>
         /// Checks if a point is within an objects dimensions.
         /// </summary>
         /// <param name="collider">The point to check.</param>
@@ -71,5 +82,7 @@ namespace _2DGameMaker.Objects.Collisions
         {
             return v1 - s1 / 2 < v2 + s2 / 2 && v1 + s1 / 2 > v2 - s2 / 2;
         }
+
+
     }
 }

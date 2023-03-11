@@ -60,11 +60,20 @@ namespace _2DGameMaker.StageCreator
 
             GUIEditCreator.InitGUI();
             GUIManager.GUIEventHandler += GUICreatorEvent;
+
+            GameObject testCollider = new StaticObject(Vec2.Zero, Vec2.One * 100f, 0f, new ObjectTexture(AssetManager.GetTexture("player", "player")));
+            testCollider.AppendScript(new Utils.PhysX.Components.DynamicCollisionObject(testCollider, null));
+
+            GameObject testCollider2 = new StaticObject(Vec2.OneX * 250f, Vec2.One * 200f, 0f, new ObjectTexture(AssetManager.GetTexture("player", "player")));
+            testCollider2.AppendScript(new Utils.PhysX.Components.StaticCollisionObject(testCollider2, null));
+
+            Instantiate(testCollider, 2);
+            Instantiate(testCollider2, 2);
         }
 
         protected override void LateUpdate()
         {
-
+            Utils.PhysX.PhysicsManager.PhysicsTick();
         }
 
         protected override void LoadContent()

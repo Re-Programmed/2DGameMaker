@@ -1,6 +1,7 @@
 ﻿using _2DGameMaker.Game;
 using _2DGameMaker.Objects;
 using _2DGameMaker.Objects.Scripting;
+using _2DGameMaker.Utils.PhysX.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,13 +24,18 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
 
         }
 
+        DynamicCollisionObject collider;
+
         protected override void init()
         {
-
+            gameObject.AppendScript(new DynamicCollisionObject(gameObject, null));
         }
 
+        float G = 0f;
         protected override void update()
         {
+            G += 0.3f;
+            gameObject.GetPosition().AddY(G * GameTime.DeltaTimeScale());
             updateMovement();
         }
 

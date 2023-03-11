@@ -41,9 +41,11 @@ namespace _2DGameMaker
 
             ControlsManager.RegisterDefaults();
 
+            
             GAME_NAME.GameName gn = new GAME_NAME.GameName();
             VideoMode videoMode = Glfw.GetVideoMode(Glfw.PrimaryMonitor);
             gn.Run(videoMode.Width, videoMode.Height, Glfw.PrimaryMonitor);
+            
 
             //TemplateGame.TemplateGame tg = new TemplateGame.TemplateGame(APPLICATION_NAME);
             //tg.Run(1920, 1080, Glfw.PrimaryMonitor);

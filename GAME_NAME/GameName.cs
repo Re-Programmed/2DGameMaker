@@ -23,7 +23,7 @@ namespace _2DGameMaker.GAME_NAME
 
         protected override void LateUpdate()
         {
-
+            Utils.PhysX.PhysicsManager.PhysicsTick();
         }
 
         protected override void Render()
