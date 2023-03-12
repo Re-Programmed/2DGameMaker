@@ -20,6 +20,7 @@ namespace _2DGameMaker.Objects.Stationaries
             : base(position, texture, alwaysLoad, parent, isUI)
         { }
 
+
         #endregion
 
     }

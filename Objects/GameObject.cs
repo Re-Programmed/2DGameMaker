@@ -152,6 +152,13 @@ namespace _2DGameMaker.Objects
             }
         }
 
-        
+        /// <summary>
+        /// Sets the position of an object by its center.
+        /// </summary>
+        /// <param name="center"></param>
+        public void SetCenter(Vec2 center)
+        {
+            SetPosition(new Vec2(center.X - scale.X / 2, center.Y - scale.Y / 2));
+        }
     }
 }

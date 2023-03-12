@@ -27,7 +27,7 @@ namespace _2DGameMaker.Game
         private Vec4 clearColor = Vec4.Zero;
         public void SetClearColor(Vec4 color) { clearColor = color; }
 
-        protected ObjectLayer[] objects = new ObjectLayer[] { new ObjectLayer(), new ObjectLayer(), new ObjectLayer() };
+        protected ObjectLayer[] objects = new ObjectLayer[] { new ObjectLayer(), new ObjectLayer(), new ObjectLayer(), new ObjectLayer() };
 
         protected Camera2d cam;
         public Camera2d GetCamera() { return cam; }
