@@ -15,6 +15,17 @@ namespace _2DGameMaker.Utils.PhysX.Components
 
         }
 
+        public enum CollisionAxis
+        {
+            TOP,
+            BOTTOM,
+            LEFT,
+            RIGHT
+        }
+
+        public delegate void OnCollision(CollisionAxis axis);
+        public OnCollision collisionEvent;
+
         protected override void destroy()
         {
 
@@ -54,6 +65,8 @@ namespace _2DGameMaker.Utils.PhysX.Components
             {
                 if (pos.Y < pos2.Y)
                 {
+                    collisionEvent?.Invoke(CollisionAxis.TOP);
+
                     float q1 = pos.Y + GetScale().Y / 2;
                     float q2 = pos2.Y - co.GetScale().Y / 2;
 
@@ -61,6 +74,8 @@ namespace _2DGameMaker.Utils.PhysX.Components
                 }
                 else
                 {
+                    collisionEvent?.Invoke(CollisionAxis.BOTTOM);
+
                     float q1 = pos.Y - GetScale().Y / 2;
                     float q2 = pos2.Y + co.GetScale().Y / 2;
 
@@ -69,8 +84,10 @@ namespace _2DGameMaker.Utils.PhysX.Components
             }
             else
             {
-                if(pos.X < pos2.X)
+                if (pos.X < pos2.X)
                 {
+                    collisionEvent?.Invoke(CollisionAxis.LEFT);
+
                     float q1 = pos.X + GetScale().X / 2;
                     float q2 = pos2.X - co.GetScale().X / 2;
 
@@ -78,6 +95,8 @@ namespace _2DGameMaker.Utils.PhysX.Components
                 }
                 else
                 {
+                    collisionEvent?.Invoke(CollisionAxis.RIGHT);
+
                     float q1 = pos.X - GetScale().X / 2;
                     float q2 = pos2.X + co.GetScale().X / 2;
 
