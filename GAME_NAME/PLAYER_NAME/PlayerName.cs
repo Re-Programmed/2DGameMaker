@@ -55,6 +55,8 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
 
         protected override void update()
         {
+            //WTF, Why does this need to be here? Why is the velocity set to 156 on start?
+            if (motionVector.X > 155) { motionVector.SetX(0); }
             updateMovement();
         }
 
@@ -62,7 +64,9 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         Vec2 jump = Vec2.Zero;
         private void updateMovement()
         {
+            Console.WriteLine(motionVector.ToString());
             bool movedOrTerminalVelocity = false;
+            
             if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_LEFT)))
             {
                 movedOrTerminalVelocity = true;
@@ -97,7 +101,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                 }
                 
             }
-
+            
             handleJumping();
 
             if (jump.Y != 0)
@@ -111,7 +115,6 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                     jump.SetY(0);
                 }
             }
-          
             gameObject.Translate(motionVector);
 
             if(motionVector.Y != 0 && jump.Y == 0)

@@ -1,5 +1,7 @@
 ﻿using _2DGameMaker.Game.Stages;
 using _2DGameMaker.GAME_NAME.GUI;
+using _2DGameMaker.Rendering.Display;
+using _2DGameMaker.Utils.Math;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,17 +22,13 @@ namespace _2DGameMaker.GAME_NAME
         protected override void Init()
         {
             StageManager.GenerateStage("ar1");
+
+            Instantiate(NumberRenderer.GetNumber(352, new Vec2(-DisplayManager.WindowSize.X/2, -DisplayManager.WindowSize.Y/2), 64f), 3);
         }
 
-        bool g = false;
         protected override void Update()
         {
             base.Update();
-            if(Input.Input.GetKey(GLFW.Keys.G) && !g)
-            {
-                g = true;
-                TransitionEffects.MultiCircleEffect(true);
-            }
         }
 
         protected override void LateUpdate()

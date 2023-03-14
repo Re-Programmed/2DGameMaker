@@ -73,5 +73,10 @@ namespace _2DGameMaker.Utils.Math
         {
             return "Vec2 [" + X + ", " + Y + "]";
         }
+
+        public Vec2 Clone()
+        {
+            return new Vec2(X, Y);
+        }
     }
 }

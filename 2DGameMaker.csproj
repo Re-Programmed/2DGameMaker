@@ -21,10 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\main_menu.pak" />
     <None Remove="Assets\player.pak" />
     <None Remove="Assets\shaders.pak" />
     <None Remove="Assets\Sound\test_sound.wav" />
     <None Remove="Assets\test_stage.pak" />
+    <None Remove="Assets\ui_defaults.pak" />
+    <None Remove="Assets\ui_menus.pak" />
     <None Remove="README.md" />
     <None Remove="test_song.ogg" />
     <None Remove="test_song.wav" />
@@ -37,7 +40,10 @@
     <Content Include="Assets\shaders.pak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="test_sound.wav">
+    <Content Include="Assets\ui_defaults.pak">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\ui_menus.pak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\test_stage.pak">
@@ -61,6 +67,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\main_menu.pak">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="README.md" />
   </ItemGroup>
 
