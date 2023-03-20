@@ -147,5 +147,10 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
             }
         }
 
+        public GameObject GetGameObject()
+        {
+            return gameObject;
+        }
+
     }
 }

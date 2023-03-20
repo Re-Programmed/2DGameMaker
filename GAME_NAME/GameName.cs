@@ -17,6 +17,8 @@ namespace _2DGameMaker.GAME_NAME
         /// </summary>
         public const byte v32X_RETRO_SCALAR = 192;
 
+        public static PLAYER_NAME.PlayerName ThePlayer;
+
         public GameName()
             : base("Game Title")
         { }
