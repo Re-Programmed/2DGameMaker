@@ -116,7 +116,8 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                     jump.SetY(0);
                 }
             }
-            gameObject.Translate(motionVector);
+
+            gameObject.Translate(new Vec2(motionVector.X * GameTime.NormalizedDeltaTime(), motionVector.Y));
 
             if(motionVector.Y != 0 && jump.Y == 0)
             {

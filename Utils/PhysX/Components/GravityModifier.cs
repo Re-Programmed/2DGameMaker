@@ -41,10 +41,10 @@ namespace _2DGameMaker.Utils.PhysX.Components
         {
             if(G < terminalVelocity)
             {
-                G += gravityIntensity /** GameTime.DeltaTimeScale()*/;
+                G += gravityIntensity;
             }
 
-            gameObject.Translate(Vec2.OneY * G /** GameTime.DeltaTimeScale()*/);
+            gameObject.Translate(Vec2.OneY * G);
         }
     }
 }
