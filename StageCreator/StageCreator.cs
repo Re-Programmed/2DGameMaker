@@ -10,11 +10,16 @@ using _2DGameMaker.Utils.Math;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace _2DGameMaker.StageCreator
 {
     public class StageCreator : Game.Game
     {
+        /// <summary>
+        /// The value to multiply sprites scales by, and to lock sprites positions to, to emulate a 224x320 resolution.
+        /// </summary>
+        public const byte v32X_RETRO_SCALAR = 192;
         const string LvlCreatorSaveName = "curr_lvl_creator";
 
         public StageCreator(string title)
@@ -61,14 +66,9 @@ namespace _2DGameMaker.StageCreator
             GUIEditCreator.InitGUI();
             GUIManager.GUIEventHandler += GUICreatorEvent;
 
-            GameObject testCollider = new StaticObject(Vec2.Zero, Vec2.One * 100f, 0f, new ObjectTexture(AssetManager.GetTexture("player", "player")));
-            testCollider.AppendScript(new Utils.PhysX.Components.DynamicCollisionObject(testCollider, null));
+          
 
-            GameObject testCollider2 = new StaticObject(Vec2.OneX * 250f, Vec2.One * 200f, 0f, new ObjectTexture(AssetManager.GetTexture("player", "player")));
-            testCollider2.AppendScript(new Utils.PhysX.Components.StaticCollisionObject(testCollider2, null));
-
-            Instantiate(testCollider, 2);
-            Instantiate(testCollider2, 2);
+            Input.Input.OnScroll += onScroll;
         }
 
         protected override void LateUpdate()
@@ -94,9 +94,26 @@ namespace _2DGameMaker.StageCreator
         string currInput;
         bool awaitingNextInput = false;
 
-        bool enterWasDown;
+        bool enterWasDown, retroScaleCheck;
+        bool saving = false;
+
         private void manageSelectedObject()
         {
+            if (Input.Input.GetKey(GLFW.Keys.M))
+            {
+                if (!saving)
+                {
+                    saving = true;
+
+                    Console.WriteLine("*SAVING*");
+                    Close();
+                }
+            }
+            else if (saving)
+            {
+                saving = false;
+            }
+
             if (selectedObject == null) { return; }
 
             if (readingInput != 0)
@@ -214,10 +231,29 @@ namespace _2DGameMaker.StageCreator
 
                 if (Input.Input.GetKey(GLFW.Keys.U))
                 {
-                    Console.WriteLine("[SETTING SCALE X] Selected Object Scale: " + selectedObject.GetLocalScale().ToString());
-                    readingInput = 3;
-                    currInput = "";
+                    if (!retroScaleCheck)
+                    {
+                        retroScaleCheck = true;
+
+                        if (Input.Input.GetKey(GLFW.Keys.LeftControl))
+                        {
+                            selectedObject.SetScale((selectedObject.GetScale() / 16) * v32X_RETRO_SCALAR);
+                            Console.WriteLine("[SETTING SCALE] Retro-Scaled Object: " + selectedObject.GetLocalScale().ToString());
+                            updateRel(selectedObject);
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("[SETTING SCALE X] Selected Object Scale: " + selectedObject.GetLocalScale().ToString());
+                            readingInput = 3;
+                            currInput = "";
+                        }
+                    }
+                }else if(retroScaleCheck)
+                {
+                    retroScaleCheck = false;
                 }
+                
 
                 if (Input.Input.GetKey(GLFW.Keys.I))
                 {
@@ -230,6 +266,7 @@ namespace _2DGameMaker.StageCreator
                 {
                     if (Input.Input.GetKey(GLFW.Keys.LeftControl))
                     {
+                        Console.WriteLine(relGameObjects.IndexOf(selectedObject));
                         StageObject rel = savedObjects[relGameObjects.IndexOf(selectedObject)];
                         Destroy(selectedObject, rel.Layer);
 
@@ -252,6 +289,16 @@ namespace _2DGameMaker.StageCreator
             so.Scale = obj.GetLocalScale().GetArray();
 
             savedObjects[relGameObjects.IndexOf(obj)] = so;
+        }
+
+        double currentOffset = 0;
+        private void onScroll(GLFW.Window window, double xoff, double yoff)
+        {
+            if(Input.Input.GetKey(GLFW.Keys.LeftControl))
+            {
+                currentOffset += yoff;
+                GUIEditCreator.SetPlaceButtonOffset((float)currentOffset);
+            }
         }
 
         protected override void Update()

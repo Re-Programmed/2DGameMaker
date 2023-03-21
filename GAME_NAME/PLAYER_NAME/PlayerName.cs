@@ -20,10 +20,12 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         private const float AIR_RESISTANCE = 0.35f;
         private const float JUMP_SMOOTHING = 2000;
 
+        private const float AIR_SPEED = 0.0005f;
+
         public PlayerName(GameObject gameObject, string arg0)
             : base(gameObject)
         {
-
+            GameName.ThePlayer = this;
         }
 
         protected override void destroy()
@@ -71,7 +73,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                 movedOrTerminalVelocity = true;
                 if (motionVector.X > -SPEED_CAP)
                 {
-                    motionVector += Vec2.OneX * -SPEED;
+                    motionVector += Vec2.OneX * -(allowJump ? SPEED : AIR_SPEED);
                 }
             }
 
@@ -80,7 +82,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                 movedOrTerminalVelocity = true;
                 if (motionVector.X < SPEED_CAP)
                 {
-                    motionVector += Vec2.OneX * SPEED;
+                    motionVector += Vec2.OneX * (allowJump ? SPEED : AIR_SPEED);
                 }
             }
 
@@ -142,6 +144,11 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                     motionVector.SetY(jump.Y);
                 }
             }
+        }
+
+        public GameObject GetGameObject()
+        {
+            return gameObject;
         }
 
     }

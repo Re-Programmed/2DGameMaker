@@ -46,6 +46,8 @@ namespace _2DGameMaker.Utils
 
         private void onScroll(GLFW.Window w, double x, double y)
         {
+            if (Input.Input.GetKey(GLFW.Keys.LeftControl)) { return; }
+          
             Zoom += (float)y / 100f;
         }
 

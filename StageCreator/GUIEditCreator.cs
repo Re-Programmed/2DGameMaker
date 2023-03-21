@@ -23,8 +23,21 @@ namespace _2DGameMaker.StageCreator
             return so;
         }
 
+        const byte SCROLL_MULTIPLIER = 10;
+        public static void SetPlaceButtonOffset(float y)
+        {
+            y *= SCROLL_MULTIPLIER;
+            foreach(KeyValuePair<StaticObject, float> b in placeButtons)
+            {
+                b.Key.SetPosition(new Vec2(b.Key.GetLocalPosition().X, b.Value + y));
+            }
+        }
+
+        static Dictionary<StaticObject, float> placeButtons;
+
         public static void CreatePlaceButtons(GameObject parent)
         {
+            placeButtons = new Dictionary<StaticObject, float>();
             int i = 0;
             foreach (KeyValuePair<string, Dictionary<string, Texture2D>> library in AssetManager.Textures)
             {
@@ -32,6 +45,8 @@ namespace _2DGameMaker.StageCreator
                 {
                     StaticObject button = new StaticObject(new Vec2(i % 2 == 0 ? parent.GetScale().X / 2 : 0, MathF.Floor(i / 2) * parent.GetScale().Y * 0.18f), new Vec2(0.5f, 0.18f), 0f, new ObjectTexture(AssetManager.GetTexture(texture.Key, library.Key)), true, parent, true);
                     button.AppendScript(new Button(button, "placeobj:" + texture.Key + ":" + library.Key));
+
+                    placeButtons.Add(button, button.GetLocalPosition().Y);
 
                     Game.Game.INSTANCE.Instantiate(button, 2);
                     i++;
