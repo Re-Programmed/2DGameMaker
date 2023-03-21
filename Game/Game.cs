@@ -128,8 +128,11 @@ namespace _2DGameMaker.Game
 
         protected abstract void Init();
 
+
         protected virtual void Update()
         {
+           
+
             UpdateE?.Invoke();
 
             CurrMousePositionWorldCoords = cam.MouseToWorldCoords(Input.Input.GetMousePosition());
