@@ -15,8 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\Sound\**" />
     <Compile Remove="Assets\Stages\**" />
+    <EmbeddedResource Remove="Assets\Sound\**" />
     <EmbeddedResource Remove="Assets\Stages\**" />
+    <None Remove="Assets\Sound\**" />
     <None Remove="Assets\Stages\**" />
   </ItemGroup>
 
@@ -24,7 +27,6 @@
     <None Remove="Assets\main_menu.pak" />
     <None Remove="Assets\player.pak" />
     <None Remove="Assets\shaders.pak" />
-    <None Remove="Assets\Sound\test_sound.wav" />
     <None Remove="Assets\test_stage.pak" />
     <None Remove="Assets\ui_defaults.pak" />
     <None Remove="Assets\ui_menus.pak" />
@@ -67,9 +69,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\main_menu.pak">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="README.md" />
   </ItemGroup>
 
@@ -86,10 +85,6 @@
     <None Update="Assets\stage_creator.pak">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\Sound\testing\" />
   </ItemGroup>
 
 </Project>

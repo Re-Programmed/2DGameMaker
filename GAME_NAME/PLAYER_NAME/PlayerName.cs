@@ -64,7 +64,6 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         Vec2 jump = Vec2.Zero;
         private void updateMovement()
         {
-            Console.WriteLine(motionVector.ToString());
             bool movedOrTerminalVelocity = false;
             
             if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_LEFT)))
