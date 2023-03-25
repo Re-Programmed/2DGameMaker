@@ -8,7 +8,17 @@ namespace _2DGameMaker.Game.Stages
 {
     public static class StageManager
     {
+        /// <summary>
+        /// Called when the game loads a new stage.
+        /// </summary>
+        public delegate void StageGenerated();
+        /// <summary>
+        /// Called when the game loads a new stage.
+        /// </summary>
+        public static StageGenerated OnStageGenerated;
+
         private static Dictionary<string, Stage> stages = new Dictionary<string, Stage>();
+
 
         /// <summary>
         /// Loads XML data into the stage manager.
@@ -36,6 +46,8 @@ namespace _2DGameMaker.Game.Stages
             {
                 Game.INSTANCE.Instantiate(obj.GetObject(), obj.Layer);
             }
+
+            OnStageGenerated?.Invoke();
         }
 
         public static void GenerateStage(string name, out GameObject[] gameObjects)
@@ -49,6 +61,7 @@ namespace _2DGameMaker.Game.Stages
             }
 
             gameObjects = go.ToArray();
+            OnStageGenerated?.Invoke();
         }
 
         public static StageObject[] GetStageObjects(string name)

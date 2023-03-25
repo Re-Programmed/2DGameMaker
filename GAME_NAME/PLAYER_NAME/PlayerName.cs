@@ -57,7 +57,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
 
         protected override void update()
         {
-            //WTF, Why does this need to be here? Why is the velocity set to 156 on start?
+            //Why is the velocity set to 156 on start?
             if (motionVector.X > 155) { motionVector.SetX(0); }
             updateMovement();
         }

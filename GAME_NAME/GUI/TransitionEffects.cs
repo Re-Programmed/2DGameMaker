@@ -117,7 +117,7 @@ namespace _2DGameMaker.GAME_NAME.GUI
             {
                 g.Circle.SetCenter(Vec2.Zero);
 
-                float s = Utils.Math.Math.Lerp(g.Circle.GetScale().X, 0.5f, shrinkRate);
+                float s = _2DGameMaker.Utils.Math.Math.Lerp(g.Circle.GetScale().X, 0.5f, shrinkRate);
 
                 g.Circle.SetScale(Vec2.One * s);
                

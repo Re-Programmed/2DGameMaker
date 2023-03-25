@@ -30,9 +30,12 @@ namespace _2DGameMaker.GAME_NAME
 
         protected override void Init()
         {
-            StageManager.GenerateStage("ar1");        
+            LevelManager.Init();
+
+            StageManager.GenerateStage("ar1");
 
             //Instantiate(NumberRenderer.GetNumber(352, new Vec2(-DisplayManager.WindowSize.X/2, -DisplayManager.WindowSize.Y/2), 64f), 3);
+
         }
 
         protected override void Update()
@@ -42,7 +45,7 @@ namespace _2DGameMaker.GAME_NAME
 
         protected override void LateUpdate()
         {
-            Utils.PhysX.PhysicsManager.PhysicsTick();
+            _2DGameMaker.Utils.PhysX.PhysicsManager.PhysicsTick();
         }
 
         protected override void Render()

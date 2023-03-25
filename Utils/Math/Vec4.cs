@@ -17,5 +17,68 @@ namespace _2DGameMaker.Utils.Math
         {
             this.W = W;
         }
+
+        /// <summary>
+        /// Takes in a hexadecimal color code (rgba) and converts it to a Vec4.
+        /// </summary>
+        /// <param name="c">Hexadecimal color code (rgba)</param>
+        /// <returns>A Vec4 color.</returns>
+        public static Vec4 StringToColor(string c)
+        {
+            string[] rgba = new string[4];
+
+            int i = 0;
+            foreach(char ch in c)
+            {
+                rgba[(int)MathF.Floor(i / 2f)] += ch;
+                i++;
+            }
+
+            return new Vec4(hex2dToInt(rgba[0]), hex2dToInt(rgba[1]), hex2dToInt(rgba[2]), hex2dToInt(rgba[3]));
+        }
+
+        /// <summary>
+        /// Converts a 2 digit hex number - represented as a string - to decimal.
+        /// </summary>
+        private static int hex2dToInt(string hex)
+        {
+            char[] chars = hex.ToCharArray();
+            return singleHexDigitToInt(chars[1]) + singleHexDigitToInt(chars[0]) * 16;
+        }
+
+        /// <summary>
+        /// Converts a char to its hexadecimal value.
+        /// </summary>
+        private static int singleHexDigitToInt(char c)
+        {
+            int res;
+            if (int.TryParse(c.ToString(), out res))
+            {
+                return res;
+            }
+
+            switch (c)
+            {
+                case 'A':
+                    return 10;
+                case 'B':
+                    return 11;
+                case 'C':
+                    return 12;
+                case 'D':
+                    return 13;
+                case 'E':
+                    return 14;
+                case 'F':
+                    return 15;
+            }
+
+            return -1;
+        }
+
+        public override string ToString()
+        {
+            return $"Vec4 [{X}, {Y}, {Z}, {W}]";
+        }
     }
 } 
