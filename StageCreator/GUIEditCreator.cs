@@ -41,10 +41,11 @@ namespace _2DGameMaker.StageCreator
             int i = 0;
             foreach (KeyValuePair<string, Dictionary<string, Texture2D>> library in AssetManager.Textures)
             {
+                if (library.Key.StartsWith("ui_")) { continue; }
                 foreach (KeyValuePair<string, Texture2D> texture in library.Value)
                 {
                     StaticObject button = new StaticObject(new Vec2(i % 2 == 0 ? parent.GetScale().X / 2 : 0, MathF.Floor(i / 2) * parent.GetScale().Y * 0.18f), new Vec2(0.5f, 0.18f), 0f, new ObjectTexture(AssetManager.GetTexture(texture.Key, library.Key)), true, parent, true);
-                    button.AppendScript(new Button(button, "placeobj:" + texture.Key + ":" + library.Key));
+                    button.AppendScript(new Button(button, StageCreator.PLACE_OBJECT_BUTTON_PREFIX + ":" + texture.Key + ":" + library.Key));
 
                     placeButtons.Add(button, button.GetLocalPosition().Y);
 

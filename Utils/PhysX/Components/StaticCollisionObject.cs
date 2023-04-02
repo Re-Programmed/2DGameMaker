@@ -11,7 +11,7 @@ namespace _2DGameMaker.Utils.PhysX.Components
         public StaticCollisionObject(GameObject gameObject, string arg0)
             : base(gameObject)
         {
-
+            if (arg0 == "true") { PhysicsManager.RegisterCollider(this); }
         }
         protected override void destroy()
         {

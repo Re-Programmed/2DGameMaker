@@ -1,6 +1,7 @@
 ﻿using _2DGameMaker.Game.Stages;
 using _2DGameMaker.Objects;
 using _2DGameMaker.Objects.Collisions;
+using _2DGameMaker.Objects.Scripting;
 using _2DGameMaker.Objects.Scripting.GUI;
 using _2DGameMaker.Objects.Stationaries;
 using _2DGameMaker.Utils;
@@ -45,6 +46,7 @@ namespace _2DGameMaker.StageCreator
 
         protected override void Init()
         {
+            /*game specific*/_2DGameMaker.GAME_NAME.StageElements.Grass.Grass.InitilizeGrassSpawns();
             Stage s;
             if (AppDataManager.GetFile("lvlcreator\\lvldata" + AppDataManager.B64OverrideSuffix, out s))
             {
@@ -64,9 +66,8 @@ namespace _2DGameMaker.StageCreator
             }
 
             GUIEditCreator.InitGUI();
+            ScriptManager.CreateScriptGUI();
             GUIManager.GUIEventHandler += GUICreatorEvent;
-
-          
 
             Input.Input.OnScroll += onScroll;
         }
@@ -306,6 +307,8 @@ namespace _2DGameMaker.StageCreator
 
             base.Update();
 
+            ScriptManager.Update();
+
             manageSelectedObject();
 
             if (Input.Input.GetMouseButtonEvent(GLFW.MouseButton.Right) == Input.Input.MOUSE_PRESSED)
@@ -334,9 +337,12 @@ namespace _2DGameMaker.StageCreator
             }
         }
 
+        public const string SCRIPT_BUTTON_PREFIX = "appendscript";
+        public const string PLACE_OBJECT_BUTTON_PREFIX = "placeobj";
+
         public static void GUICreatorEvent(GUIManager.GUIEventType type, string code)
         {
-            if(code.StartsWith("placeobj"))
+            if(code.StartsWith(PLACE_OBJECT_BUTTON_PREFIX))
             {
                 string[] code_d = code.Split(":");
 
@@ -347,6 +353,33 @@ namespace _2DGameMaker.StageCreator
                 relGameObjects.Add(so);
                 savedObjects.Add(new StageObject(so, code_d[1], code_d[2]));
             }
+
+            if(code.StartsWith(SCRIPT_BUTTON_PREFIX))
+            {
+                string code_d = code.Split(":")[1];
+
+                StageCreator instance = (StageCreator)INSTANCE;
+
+                if (instance.selectedObject != null)
+                {
+                    int i = 0;
+                    List<object> args = new List<object>();
+                    args.Add((GameObject)instance.selectedObject);
+                    foreach (string s in code.Split(":"))
+                    {
+                        if(i > 1)
+                        {
+                            args.Add(s);
+                        }
+                        i++;
+                    }
+
+                    Type t = Type.GetType(code_d);
+                    instance.selectedObject.AppendScript((ObjectAppendedScript)Activator.CreateInstance(t, args.ToArray()));
+                    Console.WriteLine("ADDED: " + code_d);
+                }
+            }
         }
+
     }
 }
