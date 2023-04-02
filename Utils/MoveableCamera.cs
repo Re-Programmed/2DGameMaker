@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using _2DGameMaker.GAME_NAME;
 using _2DGameMaker.Rendering.Cameras;
 using _2DGameMaker.Utils.Math;
 
@@ -23,22 +24,22 @@ namespace _2DGameMaker.Utils
 
         private void update()
         {
-            if (Input.Input.GetKey(GLFW.Keys.W))
+            if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_UP)))
             {
                 FocusPosition -= Vec2.OneY;
             }
 
-            if (Input.Input.GetKey(GLFW.Keys.S))
+            if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_DOWN)))
             {
                 FocusPosition += Vec2.OneY;
             }
 
-            if (Input.Input.GetKey(GLFW.Keys.A))
+            if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_LEFT)))
             {
                 FocusPosition -= Vec2.OneX;
             }
 
-            if (Input.Input.GetKey(GLFW.Keys.D))
+            if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_RIGHT)))
             {
                 FocusPosition += Vec2.OneX;
             }

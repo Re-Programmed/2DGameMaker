@@ -43,7 +43,7 @@ namespace _2DGameMaker
             AppDataManager.GetFile("application\\common", out CommonSaveData);
             Console.WriteLine(CommonSaveData.LaunchCount);
 
-            ControlsManager.RegisterDefaults();
+            ControlsManager.LoadKeysFromSave();
 
 #if !LEVEL_CREATOR
 
