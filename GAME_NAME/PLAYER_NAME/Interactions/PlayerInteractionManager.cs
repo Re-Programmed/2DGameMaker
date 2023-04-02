@@ -44,5 +44,19 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME.Interactions
         {
             interactables.Remove(i);
         }
+
+        public static bool PlayerInBounds(float x, float y, Vec2 location)
+        {
+            Vec2 pos = GameName.ThePlayer.GetGameObject().GetPosition();
+            if(pos.X < location.X + x && pos.X > location.X)
+            {
+                if (pos.Y > location.Y && pos.Y < location.Y + y)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

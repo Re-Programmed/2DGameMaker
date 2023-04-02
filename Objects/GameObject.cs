@@ -1,5 +1,6 @@
 ﻿using _2DGameMaker.Objects.Scripting;
 using _2DGameMaker.Utils.Math;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,6 +14,18 @@ namespace _2DGameMaker.Objects
         private Vec2 scale;
         private float rotation = 0f;
 
+        /// <summary>
+        /// If the object should render when it is on screen.
+        /// </summary>
+        private bool enabledOnLoad = true;
+
+        /// <summary>
+        /// Set if the object should render when it is on screen.
+        /// </summary>
+        /// <param name="enabledOnLoad"></param>
+        public void SetEnabledOnLoad(bool enabledOnLoad) { this.enabledOnLoad = enabledOnLoad; }
+        public bool GetEnabledOnLoad() { return enabledOnLoad; }
+
         private readonly bool alwaysLoad;
 
         private bool isLoaded;
@@ -21,6 +34,7 @@ namespace _2DGameMaker.Objects
         public bool IsUI() { return isUI ? true : (parent == null) ? false : parent.IsUI(); }
 
         public List<ObjectAppendedScript> ObjectAppenedScripts { get; protected set; } = new List<ObjectAppendedScript>();
+
 
         public ObjectTexture Texture { get; private set; }
 
@@ -92,7 +106,7 @@ namespace _2DGameMaker.Objects
         public void Rotate(float rotation)
         {
             this.rotation += rotation;
-            this.rotation = Math.ClampSet(this.rotation, 0f, 259f);
+            this.rotation = Utils.Math.Math.ClampSet(this.rotation, 0f, 359f);
         }
 
         public void Translate(Vec2 vector)
@@ -159,6 +173,22 @@ namespace _2DGameMaker.Objects
         public void SetCenter(Vec2 center)
         {
             SetPosition(new Vec2(center.X - scale.X / 2, center.Y - scale.Y / 2));
+        }
+
+        /// <summary>
+        /// Returns a copy of this game object.
+        /// </summary>
+        /// <returns></returns>
+        public T Clone<T>() where T : GameObject
+        {
+            T clone = (T)Activator.CreateInstance(typeof(T), position, scale, rotation, Texture, alwaysLoad, parent, isUI);
+            
+            foreach (ObjectAppendedScript oas in ObjectAppenedScripts)
+            {
+                clone.AppendScript(oas.Clone());
+            }
+
+            return clone;
         }
     }
 }

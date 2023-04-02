@@ -20,7 +20,7 @@ namespace _2DGameMaker.Utils.BeatReadr
     public class Beatmap
     {
         /// <summary>
-        /// Makeshift dictionary of what beats the BPM is changed on.
+        /// Array of what beats the BPM is changed on.
         /// </summary>
         public BeatEvent[] BPM;
         public int Beat = 0;

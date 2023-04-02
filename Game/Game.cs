@@ -180,6 +180,7 @@ namespace _2DGameMaker.Game
                 {
                     foreach (GameObject obj in objlay.objects)
                     {
+                        if (!obj.GetEnabledOnLoad()) { continue; }
                         if (obj.Texture == null) { continue; }
                         if (CollisionCheck.BoxCheck(obj.GetPosition(), cam.FocusPosition, new Vec2(DisplayManager.WindowSize.X + obj.GetScale().X, DisplayManager.WindowSize.Y + obj.GetScale().Y) * 1.5f / cam.Zoom))
                         {

@@ -8,6 +8,10 @@ namespace _2DGameMaker.Objects.Scripting
     {
         protected GameObject gameObject;
 
+        /// <summary>
+        /// Constructor to add to the update loop.
+        /// </summary>
+        /// <param name="gameObject"></param>
         public ObjectAppendedScript(GameObject gameObject)
         {
             this.gameObject = gameObject;
@@ -16,6 +20,9 @@ namespace _2DGameMaker.Objects.Scripting
             Game.Game.INSTANCE.UpdateE += update;
         }
 
+        /// <summary>
+        /// Destructor to remove from the update loop.
+        /// </summary>
         ~ObjectAppendedScript()
         {
             Game.Game.INSTANCE.UpdateE -= update;
@@ -35,6 +42,15 @@ namespace _2DGameMaker.Objects.Scripting
         public virtual void OnDisable()
         {
 
+        }
+
+        /// <summary>
+        /// Returns a copy of this script. Make sure to add args if you inherit this class.
+        /// </summary>
+        /// <returns></returns>
+        public virtual ObjectAppendedScript Clone()
+        {
+            return (ObjectAppendedScript)Activator.CreateInstance(GetType());
         }
     }
 }

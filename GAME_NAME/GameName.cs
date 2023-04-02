@@ -3,6 +3,7 @@ using _2DGameMaker.GAME_NAME.GUI;
 using _2DGameMaker.Objects.Stationaries;
 using _2DGameMaker.Rendering.Display;
 using _2DGameMaker.Utils.AssetManagment;
+using _2DGameMaker.Utils.BeatReadr;
 using _2DGameMaker.Utils.Math;
 using System;
 using System.Collections.Generic;
@@ -32,15 +33,20 @@ namespace _2DGameMaker.GAME_NAME
         {
             LevelManager.Init();
 
+            StageElements.Grass.Grass.InitilizeGrassSpawns();
+
             StageManager.GenerateStage("ar1");
 
+            Beatmap bmp = new Beatmap(new BeatEvent[] { new BeatEvent(120, 0) }, 120 * 4);
+            BeatReader.AddBeatmap("test_120bpm", bmp);
+            BeatReader.SetCurrentMap("test_120bpm");
             //Instantiate(NumberRenderer.GetNumber(352, new Vec2(-DisplayManager.WindowSize.X/2, -DisplayManager.WindowSize.Y/2), 64f), 3);
-
         }
 
         protected override void Update()
         {
             base.Update();
+            BeatReader.Update();
         }
 
         protected override void LateUpdate()
