@@ -7,6 +7,12 @@ namespace _2DGameMaker.Objects.Scripting
     public abstract class ObjectAppendedScript
     {
         protected GameObject gameObject;
+        public bool IsEnabled { get; private set; } = true;
+
+        public void SetEnabled(bool enabled)
+        {
+            IsEnabled = enabled;
+        }
 
         /// <summary>
         /// Constructor to add to the update loop.
@@ -17,7 +23,7 @@ namespace _2DGameMaker.Objects.Scripting
             this.gameObject = gameObject;
             gameObject.AppendScript(this);
             init();
-            Game.Game.INSTANCE.UpdateE += update;
+            Game.Game.INSTANCE.UpdateE += preUpdate;
         }
 
         /// <summary>
@@ -25,7 +31,7 @@ namespace _2DGameMaker.Objects.Scripting
         /// </summary>
         ~ObjectAppendedScript()
         {
-            Game.Game.INSTANCE.UpdateE -= update;
+            Game.Game.INSTANCE.UpdateE -= preUpdate;
             gameObject?.RemoveScript(this);
             destroy();
         }
@@ -34,14 +40,27 @@ namespace _2DGameMaker.Objects.Scripting
         protected abstract void update();
         protected abstract void destroy();
 
-        public virtual void OnLoad()
+        private void preUpdate()
         {
-            
+            if (!IsEnabled) { return; }
+            update();
         }
 
+        bool inDelegate = true;
+        /// <summary>
+        /// Make sure to use base.OnLoad() to allow the object to disable off screen.
+        /// </summary>
+        public virtual void OnLoad()
+        {
+            if (!inDelegate) { Game.Game.INSTANCE.UpdateE += preUpdate; inDelegate = true; }
+        }
+
+        /// <summary>
+        /// Make sure to use base.OnDisable() to allow the object to disable off screen.
+        /// </summary>
         public virtual void OnDisable()
         {
-
+            if (inDelegate) { Game.Game.INSTANCE.UpdateE -= preUpdate; inDelegate = false; }
         }
 
         /// <summary>

@@ -11,10 +11,11 @@ namespace _2DGameMaker.Utils.PhysX.Components
     {
         readonly float gravityIntensity;
         readonly float terminalVelocity;
+
         float G = 0f;
 
         public GravityModifier(GameObject gameObject, string arg0, string arg1)
-            :base(gameObject)
+            : base(gameObject)
         {
             gravityIntensity = float.Parse(arg0);
             terminalVelocity = float.Parse(arg1);

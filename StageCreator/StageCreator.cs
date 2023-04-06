@@ -289,6 +289,14 @@ namespace _2DGameMaker.StageCreator
             so.Rotation = obj.GetLocalRotation();
             so.Scale = obj.GetLocalScale().GetArray();
 
+            so.Components = new StageComponent[obj.ObjectAppenedScripts.Count];
+            for (int i = 0; i < so.Components.Length; i++)
+            {
+                string[] p;
+                string sc = ScriptManager.GetOASParams(obj.ObjectAppenedScripts[i], out p);
+                so.Components[i] = new StageComponent(sc, p);
+            }
+
             savedObjects[relGameObjects.IndexOf(obj)] = so;
         }
 
@@ -356,6 +364,7 @@ namespace _2DGameMaker.StageCreator
 
             if(code.StartsWith(SCRIPT_BUTTON_PREFIX))
             {
+                Console.WriteLine("BUTTON");
                 string code_d = code.Split(":")[1];
 
                 StageCreator instance = (StageCreator)INSTANCE;
@@ -375,8 +384,17 @@ namespace _2DGameMaker.StageCreator
                     }
 
                     Type t = Type.GetType(code_d);
+                    foreach(ObjectAppendedScript oas in instance.selectedObject.ObjectAppenedScripts)
+                    {
+                        Console.WriteLine(t.ToString());
+                        if (ScriptManager.GetOASParams(oas, out _) == t.ToString())
+                        {
+                            return;
+                        }
+                    }
                     instance.selectedObject.AppendScript((ObjectAppendedScript)Activator.CreateInstance(t, args.ToArray()));
                     Console.WriteLine("ADDED: " + code_d);
+                    instance.updateRel(instance.selectedObject);
                 }
             }
         }

@@ -40,8 +40,30 @@ namespace _2DGameMaker.StageCreator
              { "_2DGameMaker.Utils.PhysX.Components.DynamicCollisionObject:true", "component_dynamic_collider" },
              { "_2DGameMaker.Utils.PhysX.Components.StaticCollisionObject:true", "component_collider" },
              { "_2DGameMaker.GAME_NAME.StageElements.Grass.Grass:null", "component_grass" },
-             { "_2DGameMaker.Utils.PhysX.Components.GravityModifier:0.07:0.17", "component_physics" }
+             { "_2DGameMaker.Utils.PhysX.Components.GravityModifier:0.07:0.17", "component_physics" },
+             { "_2DGameMaker.GAME_NAME.StageElements.Walls.Ladder:null", "component_ladder" }
         };
+
+        public static string GetOASParams(ObjectAppendedScript oas, out string[] param)
+        {
+            for (int i = 0; i < objectAppenedScripts.Length / 2; i++)
+            {
+                string[] dat = objectAppenedScripts[i, 0].Split(":");
+                if (oas.GetType().ToString() == dat[0])
+                {
+                    param = new string[dat.Length - 1];
+                    for (int x = 0; x < dat.Length; x++)
+                    {
+                        if (x != 0) { param[x - 1] = dat[x]; }
+                    }
+
+                    return dat[0];
+                }
+            }
+
+            param = null;
+            return "";
+        }
 
         static Dictionary<StaticObject, float> placeButtons;
 

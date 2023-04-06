@@ -26,6 +26,11 @@ namespace _2DGameMaker.Objects
         public void SetEnabledOnLoad(bool enabledOnLoad) { this.enabledOnLoad = enabledOnLoad; }
         public bool GetEnabledOnLoad() { return enabledOnLoad; }
 
+        public Vec2 GetCenter()
+        {
+            return position + scale/2;
+        }
+
         private readonly bool alwaysLoad;
 
         private bool isLoaded;

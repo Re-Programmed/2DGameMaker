@@ -16,16 +16,27 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         private const float SPEED_DECREMENT = 0.0005f;
         private const float SPEED_CAP = 0.25f;
 
-        private const float JUMP_TARGET = -0.4f;
+        private const float JUMP_TARGET = -.4f;
         private const float AIR_RESISTANCE = 0.35f;
         private const float JUMP_SMOOTHING = 2000;
 
-        private const float AIR_SPEED = 0.0005f;
+        private const float AIR_SPEED = 0.0001f;
+
+        public bool IsClimbing { get; private set; } = false;
+        private bool atLadderCap = false;
 
         public PlayerName(GameObject gameObject, string arg0)
             : base(gameObject)
         {
             GameName.ThePlayer = this;
+        }
+
+        public void SetClimbing(bool climbing, bool cap = false)
+        {
+            IsClimbing = climbing;
+            gravity.SetEnabled(!IsClimbing);
+            allowJump = false;
+            atLadderCap = cap;
         }
 
         protected override void destroy()
@@ -66,8 +77,40 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         Vec2 jump = Vec2.Zero;
         private void updateMovement()
         {
+            if (IsClimbing)
+            {
+                Console.WriteLine(IsClimbing);
+                if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_UP)))
+                {
+                    if (!atLadderCap)
+                    {
+                        gameObject.Translate(-Vec2.OneY / 10 * GameTime.NormalizedDeltaTime());
+                    }
+                }
+
+                if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_DOWN)))
+                {
+                    gameObject.Translate(Vec2.OneY/10 * GameTime.NormalizedDeltaTime());
+                    atLadderCap = false;
+                }
+
+                if(Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_RIGHT)))
+                {
+                    jump = Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_UP)) ? Vec2.OneY * JUMP_TARGET : Vec2.Zero;
+                    motionVector = new Vec2(SPEED_CAP, jump.Y);
+                    SetClimbing(false);
+                }
+
+                if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_LEFT)))
+                {
+                    jump = Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_UP)) ? Vec2.OneY * JUMP_TARGET : Vec2.Zero;
+                    motionVector = new Vec2(-SPEED_CAP, jump.Y);
+                    SetClimbing(false);
+                }
+                return;
+            }
             bool movedOrTerminalVelocity = false;
-            
+
             if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_LEFT)))
             {
                 movedOrTerminalVelocity = true;
@@ -86,9 +129,9 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                 }
             }
 
-            if(!movedOrTerminalVelocity)
+            if (!movedOrTerminalVelocity)
             {
-                if(motionVector.X > 0.1f)
+                if (motionVector.X > 0.1f)
                 {
                     motionVector -= Vec2.OneX * SPEED_DECREMENT;
                 }
@@ -100,9 +143,9 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
                 {
                     motionVector.SetX(0);
                 }
-                
+
             }
-            
+
             handleJumping();
 
             if (jump.Y != 0)
@@ -119,7 +162,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
 
             gameObject.Translate(new Vec2(motionVector.X * GameTime.NormalizedDeltaTime(), motionVector.Y));
 
-            if(motionVector.Y != 0 && jump.Y == 0)
+            if (motionVector.Y != 0 && jump.Y == 0)
             {
                 if (motionVector.Y < 0.1f)
                 {
@@ -135,9 +178,9 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         private bool allowJump = false;
         private void handleJumping()
         {
-            if(allowJump)
+            if (allowJump)
             {
-                if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_UP)))
+                if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_JUMP)))
                 {
                     allowJump = false;
 
@@ -152,5 +195,8 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
             return gameObject;
         }
 
+        public override void OnLoad() { }
+
+        public override void OnDisable() { }
     }
 }

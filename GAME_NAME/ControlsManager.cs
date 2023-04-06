@@ -13,7 +13,8 @@ namespace _2DGameMaker.GAME_NAME
             PlayerMove_UP,
             PlayerMove_DOWN,
             PlayerMove_LEFT,
-            PlayerMove_RIGHT
+            PlayerMove_RIGHT,
+            PlayerMove_JUMP
         }
         
         /// <summary>
@@ -65,6 +66,7 @@ namespace _2DGameMaker.GAME_NAME
             UpdateKey(ControlOption.PlayerMove_DOWN, GLFW.Keys.S);
             UpdateKey(ControlOption.PlayerMove_LEFT, GLFW.Keys.A);
             UpdateKey(ControlOption.PlayerMove_RIGHT, GLFW.Keys.D);
+            UpdateKey(ControlOption.PlayerMove_JUMP, GLFW.Keys.Space);
 
             saveKeys();
         }

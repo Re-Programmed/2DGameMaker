@@ -1,4 +1,4 @@
-﻿#define LEVEL_CREATOR
+﻿//#define LEVEL_CREATOR
 
 using System;
 using GLFW;

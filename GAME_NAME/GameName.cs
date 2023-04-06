@@ -1,5 +1,6 @@
 ﻿using _2DGameMaker.Game.Stages;
 using _2DGameMaker.GAME_NAME.GUI;
+using _2DGameMaker.GAME_NAME.PLAYER_NAME.Interactions;
 using _2DGameMaker.Objects.Stationaries;
 using _2DGameMaker.Rendering.Display;
 using _2DGameMaker.Utils.AssetManagment;
@@ -47,6 +48,7 @@ namespace _2DGameMaker.GAME_NAME
         {
             base.Update();
             BeatReader.Update();
+            PlayerInteractionManager.CheckInteraction();
         }
 
         protected override void LateUpdate()
