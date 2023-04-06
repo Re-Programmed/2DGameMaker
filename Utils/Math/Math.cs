@@ -31,6 +31,11 @@ namespace _2DGameMaker.Utils.Math
             return value * (1 - by) + secondValue * by;
         }
 
+        public static Vec2 Lerp(Vec2 value, Vec2 secondValue, float by)
+        {
+            return new Vec2(Lerp(value.X, secondValue.X, by), Lerp(value.Y, secondValue.Y, by));
+        }
+
         /// <summary>
         /// Wraps value to lower limit if it is greater than the upper limit and vice versa.
         /// </summary>

@@ -16,7 +16,7 @@ namespace _2DGameMaker.Rendering.Cameras
     public class Camera2d
     {
         public Vec2 FocusPosition { get; set; }
-        public float Zoom { get; set; }
+        public float Zoom;
 
         public bool DisableZoom;
 

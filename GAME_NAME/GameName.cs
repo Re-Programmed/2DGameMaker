@@ -1,5 +1,6 @@
 ﻿using _2DGameMaker.Game.Stages;
 using _2DGameMaker.GAME_NAME.GUI;
+using _2DGameMaker.GAME_NAME.PLAYER_NAME.Camera;
 using _2DGameMaker.GAME_NAME.PLAYER_NAME.Interactions;
 using _2DGameMaker.Objects.Stationaries;
 using _2DGameMaker.Rendering.Display;
@@ -24,6 +25,11 @@ namespace _2DGameMaker.GAME_NAME
         public GameName()
             : base("Game Title")
         { }
+
+        protected override void loadCamera()
+        {
+            cam = new DynamicCamera(Vec2.Zero, 1f);
+        }
 
         protected override void Close()
         {
