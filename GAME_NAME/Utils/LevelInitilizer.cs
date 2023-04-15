@@ -24,7 +24,7 @@ namespace _2DGameMaker.GAME_NAME.Utils
 
         protected override void init()
         {
-
+            GUI.GameUI.StatsDisplay.Initilize();
         }
 
         protected override void update()

@@ -11,7 +11,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
 {
     public class PlayerName : ObjectAppendedScript
     {
-
+        #region Physics Params
         private const float SPEED = 0.05f;
         private const float SPEED_DECREMENT = 0.0005f;
         private const float SPEED_CAP = 0.25f;
@@ -21,6 +21,9 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         private const float JUMP_SMOOTHING = 2000;
 
         private const float AIR_SPEED = 0.0001f;
+        #endregion
+
+        private PlayerStats playerStats;
 
         public bool IsClimbing { get; private set; } = false;
         private bool atLadderCap = false;
@@ -29,6 +32,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
             : base(gameObject)
         {
             GameName.ThePlayer = this;
+            playerStats = GameName.GetSavedPlayerStats();
         }
 
         public void SetClimbing(bool climbing, bool cap = false)
@@ -186,6 +190,8 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
 
                     jump = Vec2.OneY * JUMP_TARGET;
                     motionVector.SetY(jump.Y);
+
+                    playerStats.AddScore(5);
                 }
             }
         }

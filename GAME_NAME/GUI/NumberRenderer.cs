@@ -38,16 +38,26 @@ namespace _2DGameMaker.GAME_NAME.GUI
         /// <param name="number">The number to set as the game object's texture.</param>
         /// <param name="position">The upper left corner of the number.</param>
         /// <param name="scale">The size of the number.</param>
-        public static UINumberObject GetNumber(int number, Vec2 position, float scale, int layer = 3, float padding = -12f)
+        public static UINumberObject GetNumber(int number, Vec2 position, float scale, out UINumberObject[] objects, int layer = 3, int padWithZeros = 0, float padding = -12f)
         {
             UINumberObject parentObject = new UINumberObject(position, Vec2.One, null);
 
             Vec2 currentPosition = Vec2.Zero;
-            char[] draws = number.ToString().ToCharArray();
+            List<char> draws = new List<char>();
 
-            UINumberObject[] objects = new UINumberObject[draws.Length]; 
+            string str = number.ToString();
 
-            for(int i = 0; i < draws.Length; ++i)
+            padWithZeros -= str.Length;
+            if(padWithZeros > 0)
+            {
+                for (int i = 0; i < padWithZeros; i++) { draws.Add('0'); }
+
+                draws.AddRange(str.ToCharArray());
+            }
+
+            objects = new UINumberObject[draws.Count]; 
+
+            for(int i = 0; i < draws.Count; ++i)
             {
                 objects[i] = GetSingleNumber(draws[i], currentPosition.Clone(), scale, parentObject);
                 Game.Game.INSTANCE.Instantiate(objects[i], layer);

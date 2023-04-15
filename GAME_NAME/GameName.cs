@@ -1,5 +1,6 @@
 ﻿using _2DGameMaker.Game.Stages;
 using _2DGameMaker.GAME_NAME.GUI;
+using _2DGameMaker.GAME_NAME.PLAYER_NAME;
 using _2DGameMaker.GAME_NAME.PLAYER_NAME.Camera;
 using _2DGameMaker.GAME_NAME.PLAYER_NAME.Interactions;
 using _2DGameMaker.Objects.Stationaries;
@@ -47,7 +48,14 @@ namespace _2DGameMaker.GAME_NAME
             Beatmap bmp = new Beatmap(new BeatEvent[] { new BeatEvent(120, 0) }, 120 * 4);
             BeatReader.AddBeatmap("test_120bpm", bmp);
             BeatReader.SetCurrentMap("test_120bpm");
-            //Instantiate(NumberRenderer.GetNumber(352, new Vec2(-DisplayManager.WindowSize.X/2, -DisplayManager.WindowSize.Y/2), 64f), 3);
+
+        }
+
+        public static PlayerStats GetSavedPlayerStats()
+        {
+            PlayerStats stats;
+            AppDataManager.GetFile("pstat", out stats);
+            return stats;
         }
 
         protected override void Update()

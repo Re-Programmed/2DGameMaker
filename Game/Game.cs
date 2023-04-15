@@ -135,16 +135,6 @@ namespace _2DGameMaker.Game
 
             CurrMousePositionWorldCoords = cam.MouseToWorldCoords(Input.Input.GetMousePosition());
 
-            if (instantiations.Count > 0)
-            {
-                foreach (KeyValuePair<GameObject, int> valuePair in instantiations)
-                {
-                    objects[valuePair.Value].objects.Add(valuePair.Key);
-                }
-
-                instantiations.Clear();
-            }
-
             if (destructions.Count > 0)
             {
                 foreach (KeyValuePair<GameObject, int> obj in destructions)
@@ -156,6 +146,17 @@ namespace _2DGameMaker.Game
 
                 destructions.Clear();
             }
+            if (instantiations.Count > 0)
+            {
+                foreach (KeyValuePair<GameObject, int> valuePair in instantiations)
+                {
+                    objects[valuePair.Value].objects.Add(valuePair.Key);
+                }
+
+                instantiations.Clear();
+            }
+
+           
         }
 
         protected void renderScreen()
