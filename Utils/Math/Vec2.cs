@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Numerics;
 using System.Text;
 
@@ -7,10 +8,17 @@ namespace _2DGameMaker.Utils.Math
 {
     public class Vec2
     {
-        public static readonly Vec2 Zero = new Vec2(0, 0);
-        public static readonly Vec2 One = new Vec2(1, 1);
-        public static readonly Vec2 OneX = new Vec2(1, 0);
-        public static readonly Vec2 OneY = new Vec2(0, 1);
+        public static Vec2 Zero
+        { get => new Vec2(0, 0); }
+
+        public static Vec2 One
+        { get => new Vec2(1, 1); }
+
+        public static  Vec2 OneX
+        { get => new Vec2(1, 0); }
+
+        public static Vec2 OneY
+        { get => new Vec2(0, 1); }
 
         public float X { get; protected set; }
         public float Y { get; protected set; }

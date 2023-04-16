@@ -15,6 +15,7 @@ namespace _2DGameMaker.GAME_NAME.StageElements.Walls
         public Ladder(GameObject gameObject, string arg0)
             :base(gameObject, ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_UP), arg0.ToLower() == "true")
         {
+            Console.WriteLine(arg0);
             ladderCap = arg0.ToLower() == "true";
         }
 

@@ -30,9 +30,12 @@ namespace _2DGameMaker.GAME_NAME.GUI.GameUI
 
             numberObjects = new UINumberObject[SCORE_ZERO_PADDING + 1];
             UINumberObject[] objects;
-            numberObjects[0] = NumberRenderer.GetNumber(score, new Vec2(-DisplayManager.WindowSize.X / 2, -DisplayManager.WindowSize.Y / 2), 64f, out objects, STATS_UI_LAYER, 6);
+            Vec2 pos = new Vec2(-DisplayManager.WindowSize.X / 2, -DisplayManager.WindowSize.Y / 2);
+            numberObjects[0] = NumberRenderer.GetNumber(score, pos, 64f, out objects, STATS_UI_LAYER, 6);
 
             for (int i = 0; i < objects.Length; i++) { numberObjects[i + 1] = objects[i]; }
+
+            Console.WriteLine(numberObjects[1].GetPosition());
 
             Game.Game.INSTANCE.Instantiate(numberObjects[0], STATS_UI_LAYER);
         }

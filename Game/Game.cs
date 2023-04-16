@@ -181,7 +181,7 @@ namespace _2DGameMaker.Game
                     {
                         if (!obj.GetEnabledOnLoad()) { continue; }
                         if (obj.Texture == null) { continue; }
-                        if (CollisionCheck.BoxCheck(obj.GetPosition(), cam.FocusPosition, new Vec2(DisplayManager.WindowSize.X + obj.GetScale().X, DisplayManager.WindowSize.Y + obj.GetScale().Y) * 1.5f / cam.Zoom))
+                        if (obj.GetAlwaysLoad() || CollisionCheck.BoxCheck(obj.GetPosition(), cam.FocusPosition, new Vec2(DisplayManager.WindowSize.X + obj.GetScale().X, DisplayManager.WindowSize.Y + obj.GetScale().Y) * 1.5f / cam.Zoom))
                         {
                             if (!obj.GetLoaded())
                             {
@@ -189,7 +189,7 @@ namespace _2DGameMaker.Game
                             }
                             SpriteRenderer.DrawSprite(cam, obj, obj.Texture.GetTexture(), obj.Texture.GetColor(), obj.IsUI());
                         }
-                        else if (obj.GetLoaded() && !obj.GetAlwaysLoad())
+                        else if (obj.GetLoaded())
                         {
                             obj.SetLoaded(false);
                         }

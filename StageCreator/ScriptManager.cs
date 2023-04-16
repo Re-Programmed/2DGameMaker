@@ -41,7 +41,8 @@ namespace _2DGameMaker.StageCreator
              { "_2DGameMaker.Utils.PhysX.Components.StaticCollisionObject:true", "component_collider" },
              { "_2DGameMaker.GAME_NAME.StageElements.Grass.Grass:null", "component_grass" },
              { "_2DGameMaker.Utils.PhysX.Components.GravityModifier:0.07:0.17", "component_physics" },
-             { "_2DGameMaker.GAME_NAME.StageElements.Walls.Ladder:null", "component_ladder" }
+             { "_2DGameMaker.GAME_NAME.StageElements.Walls.Ladder:null", "component_ladder" },
+             { "_2DGameMaker.GAME_NAME.StageElements.Walls.Ladder:true", "component_ladder_top" }
         };
 
         public static string GetOASParams(ObjectAppendedScript oas, out string[] param)

@@ -13,6 +13,14 @@ namespace _2DGameMaker.Utils.PhysX.Components
         {
             if (arg0 == "true") { PhysicsManager.RegisterCollider(this); }
         }
+
+        //Serialize
+        public StaticCollisionObject(GameObject gameObject)
+            : base(gameObject)
+        {
+            PhysicsManager.RegisterCollider(this);
+        }
+
         protected override void destroy()
         {
 

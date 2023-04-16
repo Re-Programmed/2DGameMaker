@@ -67,9 +67,9 @@ namespace _2DGameMaker.Objects.Scripting
         /// Returns a copy of this script. Make sure to add args if you inherit this class.
         /// </summary>
         /// <returns></returns>
-        public virtual ObjectAppendedScript Clone()
+        public virtual ObjectAppendedScript Clone(GameObject gameObject)
         {
-            return (ObjectAppendedScript)Activator.CreateInstance(GetType());
+            return (ObjectAppendedScript)Activator.CreateInstance(GetType(), gameObject);
         }
     }
 }

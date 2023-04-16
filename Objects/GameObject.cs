@@ -190,7 +190,7 @@ namespace _2DGameMaker.Objects
             
             foreach (ObjectAppendedScript oas in ObjectAppenedScripts)
             {
-                clone.AppendScript(oas.Clone());
+                oas.Clone(clone);
             }
 
             return clone;

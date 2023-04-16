@@ -34,7 +34,13 @@ namespace _2DGameMaker.StageCreator
 
         protected override void Close()
         {        
+
+        }
+
+        private void save()
+        {
             AppDataManager.UpdateFile("lvlcreator\\lvldata", new Stage(savedObjects.ToArray()), true);
+            AppDataManager.SaveFiles();
         }
 
         protected override void loadCamera()
@@ -109,7 +115,7 @@ namespace _2DGameMaker.StageCreator
                     saving = true;
 
                     Console.WriteLine("*SAVING*");
-                    Close();
+                    save();
                 }
             }
             else if (saving)
@@ -216,6 +222,16 @@ namespace _2DGameMaker.StageCreator
                         relGameObjects.Add(so);
                         savedObjects.Add(new StageObject(savedObjects[relGameObjects.IndexOf(selectedObject[0])]));
                         duped = true;
+
+                        selectedObject = new List<GameObject>
+                        {
+                            so
+                        };
+
+                        selectedColor = new List<Vec4>
+                        {
+                            so.Texture.GetColor()
+                        };
                     }
                 }
                 else
@@ -327,14 +343,18 @@ namespace _2DGameMaker.StageCreator
             so.Scale = obj.GetLocalScale().GetArray();
 
             
-            so.Components = new StageComponent[obj.ObjectAppenedScripts.Count - 1];
-            for (int i = 0; i < so.Components.Length; i++)
+            if(obj.ObjectAppenedScripts.Count > 0)
             {
-                string[] p;
-                string sc = ScriptManager.GetOASParams(obj.ObjectAppenedScripts[i], out p);
-                so.Components[i] = new StageComponent(sc, p);
+                so.Components = new StageComponent[obj.ObjectAppenedScripts.Count - 1];
+                for (int i = 0; i < so.Components.Length; i++)
+                {
+                    string[] p;
+                    string sc = ScriptManager.GetOASParams(obj.ObjectAppenedScripts[i], out p);
+                    so.Components[i] = new StageComponent(sc, p);
+                }
+
             }
-            
+
             savedObjects[relGameObjects.IndexOf(obj)] = so;
         }
 
