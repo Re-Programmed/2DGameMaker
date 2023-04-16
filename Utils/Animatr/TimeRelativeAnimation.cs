@@ -36,10 +36,12 @@ namespace _2DGameMaker.Utils.Animatr
 
         protected override void update()
         {
+            if (!playing) { return; }
             T += GameTime.NormalizedDeltaTime();
 
             if(T >= speed)
             {
+                T = 0;
                 advanceFrame();
             }
         }

@@ -87,8 +87,8 @@ namespace _2DGameMaker.StageCreator
 
         }
 
-        GameObject selectedObject;
-        Vec4 selectedColor;
+        List<GameObject> selectedObject = new List<GameObject>();
+        List<Vec4> selectedColor = new List<Vec4>();
 
         int readingInput = 0;
 
@@ -97,6 +97,8 @@ namespace _2DGameMaker.StageCreator
 
         bool enterWasDown, retroScaleCheck;
         bool saving = false;
+
+        bool duped = false;
 
         private void manageSelectedObject()
         {
@@ -115,7 +117,7 @@ namespace _2DGameMaker.StageCreator
                 saving = false;
             }
 
-            if (selectedObject == null) { return; }
+            if (selectedObject.Count < 1) { return; }
 
             if (readingInput != 0)
             {
@@ -151,41 +153,47 @@ namespace _2DGameMaker.StageCreator
                 {
                     if (readingInput == 1)
                     {
-                        selectedObject.SetPosition(new Vec2(int.Parse(currInput), selectedObject.GetLocalPosition().Y));
+                        foreach (GameObject go in selectedObject) { go.SetPosition(new Vec2(int.Parse(currInput), go.GetLocalPosition().Y)); }
                         Console.WriteLine("^ SET");
 
                         readingInput = 0;
                     }else if(readingInput == 2)
                     {
-                        selectedObject.SetPosition(new Vec2(selectedObject.GetLocalPosition().X, int.Parse(currInput)));
+                        foreach (GameObject go in selectedObject) { go.SetPosition(new Vec2(go.GetLocalPosition().X, int.Parse(currInput))); }
                         Console.WriteLine("^ SET");
 
                         readingInput = 0;
                     }
                     else if (readingInput == 3)
                     {
-                        selectedObject.SetScale(new Vec2(int.Parse(currInput), selectedObject.GetLocalScale().Y));
-                        Console.WriteLine("[SETTING SCALE Y] Selected Object Scale: " + selectedObject.GetLocalScale().ToString());
+                        foreach (GameObject go in selectedObject) { go.SetScale(new Vec2(int.Parse(currInput), go.GetLocalScale().Y)); }
+                        Console.WriteLine("[SETTING SCALE Y] Selected Object Scale: " + selectedObject[0].GetLocalScale().ToString());
 
                         currInput = "";
                         readingInput = 4;
                     }
                     else if (readingInput == 4 && !enterWasDown)
                     {
-                        selectedObject.SetScale(new Vec2(selectedObject.GetLocalScale().X, int.Parse(currInput)));
+                        foreach (GameObject go in selectedObject) { go.SetScale(new Vec2(go.GetLocalScale().X, int.Parse(currInput))); }
                         Console.WriteLine("^SET");
 
                         readingInput = 0;
                     }
                     else if (readingInput == 5)
                     {
-                        selectedObject.SetRotation(_2DGameMaker.Utils.Math.Math.DegToRad(int.Parse(currInput)));
+                        foreach (GameObject go in selectedObject) { go.SetRotation(_2DGameMaker.Utils.Math.Math.DegToRad(int.Parse(currInput))); }
+                        Console.WriteLine("^SET");
+
+                        readingInput = 0;
+                    }else if(readingInput == 6)
+                    {
+                        foreach (GameObject go in selectedObject) { go.SetPosition(new Vec2(go.GetPosition().X * int.Parse(currInput), go.GetLocalPosition().Y * int.Parse(currInput))); }
                         Console.WriteLine("^SET");
 
                         readingInput = 0;
                     }
 
-                    updateRel(selectedObject);
+                    foreach (GameObject go in selectedObject) { updateRel(go); }
                     enterWasDown = true;
 
                 }
@@ -196,36 +204,62 @@ namespace _2DGameMaker.StageCreator
             }
             else
             {
+                if(Input.Input.GetKey(GLFW.Keys.B))
+                {
+                    if(!duped)
+                    {
+                        StaticObject so = selectedObject[0].Clone<StaticObject>();
+                        so.Texture.SetColor(Vec4.One);
+
+                        INSTANCE.Instantiate(so, 1);
+
+                        relGameObjects.Add(so);
+                        savedObjects.Add(new StageObject(savedObjects[relGameObjects.IndexOf(selectedObject[0])]));
+                        duped = true;
+                    }
+                }
+                else
+                {
+                    duped = false;
+                }
+
                 if (Input.Input.GetKey(GLFW.Keys.Left))
                 {
-                    selectedObject.SetPosition(selectedObject.GetLocalPosition() - (Vec2.OneX * 50 * Game.GameTime.DeltaTimeScale()));
+                    foreach (GameObject go in selectedObject) { go.SetPosition(go.GetLocalPosition() - (Vec2.OneX * 50 * Game.GameTime.DeltaTimeScale())); }
                 }
 
                 if (Input.Input.GetKey(GLFW.Keys.Right))
                 {
-                    selectedObject.SetPosition(selectedObject.GetLocalPosition() + (Vec2.OneX * 50 * Game.GameTime.DeltaTimeScale()));
+                    foreach (GameObject go in selectedObject) { go.SetPosition(go.GetLocalPosition() + (Vec2.OneX * 50 * Game.GameTime.DeltaTimeScale())); }
                 }
 
                 if (Input.Input.GetKey(GLFW.Keys.Up))
                 {
-                    selectedObject.SetPosition(selectedObject.GetLocalPosition() - (Vec2.OneY * 50 * Game.GameTime.DeltaTimeScale()));
+                    foreach (GameObject go in selectedObject) { go.SetPosition(go.GetLocalPosition() - (Vec2.OneY * 50 * Game.GameTime.DeltaTimeScale())); }
                 }
 
                 if (Input.Input.GetKey(GLFW.Keys.Down))
                 {
-                    selectedObject.SetPosition(selectedObject.GetLocalPosition() + (Vec2.OneY * 50 * Game.GameTime.DeltaTimeScale()));
+                    foreach (GameObject go in selectedObject) { go.SetPosition(go.GetLocalPosition() + (Vec2.OneY * 50 * Game.GameTime.DeltaTimeScale())); }
                 }
 
                 if (Input.Input.GetKey(GLFW.Keys.X))
                 {
-                    Console.WriteLine("[SETTING X] Selected Object Position: " + selectedObject.GetLocalPosition().ToString());
+                    Console.WriteLine("[SETTING X] Selected Object Position: " + selectedObject[0].GetLocalPosition().ToString());
                     readingInput = 1;
+                    currInput = "";
+                }
+
+                if (Input.Input.GetKey(GLFW.Keys.V))
+                {
+                    Console.WriteLine("[MULTIPLYING POSITION] Selected Object Position: " + selectedObject[0].GetLocalPosition().ToString());
+                    readingInput = 6;
                     currInput = "";
                 }
 
                 if (Input.Input.GetKey(GLFW.Keys.Y))
                 {
-                    Console.WriteLine("[SETTING Y] Selected Object Position: " + selectedObject.GetLocalPosition().ToString());
+                    Console.WriteLine("[SETTING Y] Selected Object Position: " + selectedObject[0].GetLocalPosition().ToString());
                     readingInput = 2;
                     currInput = "";
                 }
@@ -238,14 +272,14 @@ namespace _2DGameMaker.StageCreator
 
                         if (Input.Input.GetKey(GLFW.Keys.LeftControl))
                         {
-                            selectedObject.SetScale((selectedObject.GetScale() / 16) * v32X_RETRO_SCALAR);
-                            Console.WriteLine("[SETTING SCALE] Retro-Scaled Object: " + selectedObject.GetLocalScale().ToString());
-                            updateRel(selectedObject);
+                            foreach (GameObject go in selectedObject) { go.SetScale((go.GetScale() / 16) * v32X_RETRO_SCALAR); }
+                            Console.WriteLine("[SETTING SCALE] Retro-Scaled Object: " + selectedObject[0].GetLocalScale().ToString());
+                            foreach (GameObject go in selectedObject) { updateRel(go); }
 
                         }
                         else
                         {
-                            Console.WriteLine("[SETTING SCALE X] Selected Object Scale: " + selectedObject.GetLocalScale().ToString());
+                            Console.WriteLine("[SETTING SCALE X] Selected Object Scale: " + selectedObject[0].GetLocalScale().ToString());
                             readingInput = 3;
                             currInput = "";
                         }
@@ -258,7 +292,7 @@ namespace _2DGameMaker.StageCreator
 
                 if (Input.Input.GetKey(GLFW.Keys.I))
                 {
-                    Console.WriteLine("[SETTING ROTATION] Selected Object Rotation: " + selectedObject.GetLocalRotation());
+                    Console.WriteLine("[SETTING ROTATION] Selected Object Rotation: " + selectedObject[0].GetLocalRotation());
                     readingInput = 5;
                     currInput = "";
                 }
@@ -267,14 +301,17 @@ namespace _2DGameMaker.StageCreator
                 {
                     if (Input.Input.GetKey(GLFW.Keys.LeftControl))
                     {
-                        Console.WriteLine(relGameObjects.IndexOf(selectedObject));
-                        StageObject rel = savedObjects[relGameObjects.IndexOf(selectedObject)];
-                        Destroy(selectedObject, rel.Layer);
+                        foreach (GameObject go in selectedObject)
+                        {
+                            Console.WriteLine(relGameObjects.IndexOf(go));
+                            StageObject rel = savedObjects[relGameObjects.IndexOf(go)];
+                            Destroy(go, rel.Layer);
 
-                        savedObjects.Remove(rel);
-                        relGameObjects.Remove(selectedObject);
+                            savedObjects.Remove(rel);
+                            relGameObjects.Remove(go);
+                        }
 
-                        selectedObject = null;
+                        selectedObject = new List<GameObject>();
                     }
                 }
             }
@@ -289,14 +326,15 @@ namespace _2DGameMaker.StageCreator
             so.Rotation = obj.GetLocalRotation();
             so.Scale = obj.GetLocalScale().GetArray();
 
-            so.Components = new StageComponent[obj.ObjectAppenedScripts.Count];
+            
+            so.Components = new StageComponent[obj.ObjectAppenedScripts.Count - 1];
             for (int i = 0; i < so.Components.Length; i++)
             {
                 string[] p;
                 string sc = ScriptManager.GetOASParams(obj.ObjectAppenedScripts[i], out p);
                 so.Components[i] = new StageComponent(sc, p);
             }
-
+            
             savedObjects[relGameObjects.IndexOf(obj)] = so;
         }
 
@@ -328,14 +366,29 @@ namespace _2DGameMaker.StageCreator
                         if(obj.IsUI()) { continue; }
                         if(CollisionCheck.BoxCheck(CurrMousePositionWorldCoords, obj, true))
                         {
-                            if (obj != selectedObject)
+                            if (!selectedObject.Contains(obj))
                             {
-                                if (selectedObject != null)
+                                if(!Input.Input.GetKey(GLFW.Keys.LeftShift))
                                 {
-                                    selectedObject.Texture.SetColor(selectedColor);
+                                    if (selectedObject.Count != 0)
+                                    {
+                                        int i = 0;
+                                        foreach (GameObject go in selectedObject) { go.Texture.SetColor(selectedColor[i]); i++; }
+                                    }
+                                    selectedObject = new List<GameObject>();
+                                    selectedColor = new List<Vec4>();
                                 }
-                                selectedObject = obj;
-                                selectedColor = obj.Texture.GetColor();
+
+                                selectedObject.Add(obj);
+                                selectedColor.Add(obj.Texture.GetColor());
+
+                                Console.WriteLine("-------- SCRIPTS: --------");
+                                foreach (ObjectAppendedScript oas in obj.ObjectAppenedScripts)
+                                {
+                                    Console.WriteLine(ScriptManager.GetOASParams(oas, out _));
+                                }
+                                Console.WriteLine("--------------------------");
+
                                 obj.Texture.SetColor(Vec4.Red);
                                 return;
                             }
@@ -369,32 +422,35 @@ namespace _2DGameMaker.StageCreator
 
                 StageCreator instance = (StageCreator)INSTANCE;
 
-                if (instance.selectedObject != null)
+                if (instance.selectedObject.Count != 0)
                 {
-                    int i = 0;
-                    List<object> args = new List<object>();
-                    args.Add((GameObject)instance.selectedObject);
-                    foreach (string s in code.Split(":"))
+                    foreach (GameObject go in instance.selectedObject)
                     {
-                        if(i > 1)
+                        int i = 0;
+                        List<object> args = new List<object>();
+                        args.Add((GameObject)go);
+                        foreach (string s in code.Split(":"))
                         {
-                            args.Add(s);
+                            if (i > 1)
+                            {
+                                args.Add(s);
+                            }
+                            i++;
                         }
-                        i++;
-                    }
 
-                    Type t = Type.GetType(code_d);
-                    foreach(ObjectAppendedScript oas in instance.selectedObject.ObjectAppenedScripts)
-                    {
-                        Console.WriteLine(t.ToString());
-                        if (ScriptManager.GetOASParams(oas, out _) == t.ToString())
+                        Type t = Type.GetType(code_d);
+                        foreach (ObjectAppendedScript oas in go.ObjectAppenedScripts)
                         {
-                            return;
+                            Console.WriteLine(t.ToString());
+                            if (ScriptManager.GetOASParams(oas, out _) == t.ToString())
+                            {
+                                return;
+                            }
                         }
+                        go.AppendScript((ObjectAppendedScript)Activator.CreateInstance(t, args.ToArray()));
+                        Console.WriteLine("ADDED: " + code_d);
+                        instance.updateRel(go);
                     }
-                    instance.selectedObject.AppendScript((ObjectAppendedScript)Activator.CreateInstance(t, args.ToArray()));
-                    Console.WriteLine("ADDED: " + code_d);
-                    instance.updateRel(instance.selectedObject);
                 }
             }
         }

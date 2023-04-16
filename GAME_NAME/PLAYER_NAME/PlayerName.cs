@@ -1,6 +1,7 @@
 ﻿using _2DGameMaker.Game;
 using _2DGameMaker.Objects;
 using _2DGameMaker.Objects.Scripting;
+using _2DGameMaker.Utils.Animatr;
 using _2DGameMaker.Utils.Math;
 using _2DGameMaker.Utils.PhysX.Components;
 using System;
@@ -12,8 +13,8 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
     public class PlayerName : ObjectAppendedScript
     {
         #region Physics Params
-        private const float SPEED = 0.05f;
-        private const float SPEED_DECREMENT = 0.0005f;
+        private const float SPEED = 0.00025f;
+        private const float SPEED_DECREMENT = 0.00025f;
         private const float SPEED_CAP = 0.25f;
 
         private const float JUMP_TARGET = -.4f;
@@ -27,6 +28,7 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
 
         public bool IsClimbing { get; private set; } = false;
         private bool atLadderCap = false;
+
 
         public PlayerName(GameObject gameObject, string arg0)
             : base(gameObject)
@@ -83,7 +85,6 @@ namespace _2DGameMaker.GAME_NAME.PLAYER_NAME
         {
             if (IsClimbing)
             {
-                Console.WriteLine(IsClimbing);
                 if (Input.Input.GetKey(ControlsManager.GetKey(ControlsManager.ControlOption.PlayerMove_UP)))
                 {
                     if (!atLadderCap)

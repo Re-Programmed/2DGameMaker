@@ -12,10 +12,17 @@ namespace _2DGameMaker.Utils.Animatr
         private readonly Texture2D[] frames;
         private int currentFrame = 0;
 
+        protected bool playing = false;
+
         public Animation(GameObject gameObject, Texture2D[] frames)
             : base(gameObject)
         {
             this.frames = frames;
+        }
+
+        public void SetPlaying(bool playing)
+        {
+            this.playing = playing;
         }
 
         protected void advanceFrame()

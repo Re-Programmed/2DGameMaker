@@ -57,6 +57,16 @@ namespace _2DGameMaker.Game.Stages
             }
         }
 
+        public StageObject(StageObject so)
+        {
+            Layer = so.Layer;
+            Position = so.Position;
+            Scale = so.Scale;
+            Rotation = so.Rotation;
+            Texture = so.Texture;
+            Components = so.Components;
+        }
+
         public StaticObject GetObject()
         {
             ObjectTexture texture = new ObjectTexture(AssetManager.GetTexture(Texture[0], Texture[1]));
